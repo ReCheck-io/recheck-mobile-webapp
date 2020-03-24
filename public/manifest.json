@@ -1,0 +1,20 @@
+{
+  "name": "ReCheck Docs",
+  "short_name": "ReDocs",
+  "icons": [
+    {
+      "src": "./img/icons/logo-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "./img/icons/logo-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "./index.html",
+  "display": "minimal-ui",
+  "background_color": "#111111",
+  "theme_color": "#111111"
+}
