@@ -1,7 +1,7 @@
 # recheck-mobile-webapp
 This is the app we use for storage of keys and working on the phone through our service.
 
-### To use you have to 
+## Requirements
 
 - have node 8.15 >=
 
