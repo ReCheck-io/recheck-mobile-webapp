@@ -9,13 +9,13 @@ This is the app we use for storage of keys and working on the phone through our 
 ## Getting started
 
 ### Start the app
-This software is always running on beta.recheck.io/sign and there the app is on stable version. 
+This software is always running on https://beta.recheck.io/sign and there the app is on stable version. 
 
 This repo, however is having the lastes version, therefore sometimes it may not work as expected. 
 
 You can run this repo in four different ways: 
 
-```npm run beta ``` - it will run the app with config for connection to beta.recheck.io
+```npm run beta ``` - it will run the app with config for connection to https://beta.recheck.io
 
 ```npm run local_ae``` - it will run the app with config for localhost:3000 and AEthernity blockchain.
 
