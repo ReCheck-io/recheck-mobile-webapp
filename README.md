@@ -4,20 +4,26 @@ This is the app we use for storage of keys and working on the phone through our 
 ## Requirements
 
 - have node 8.15 >=
+- ``` npm install ```
 
-    ``` npm install ```
+## Getting started
 
-- ```npm run serve``` - it will listen on localhost:8080
+### Start the app
+This software is always running on beta.recheck.io/sign and there the app is on stable version. 
 
-As for a server you can open ./chain/index.js and where the [client library](https://github.com/ReCheck-io/recheck-clientjs-library) is defined, which holds all of the needed API to connect to the server, and then open inside the library.
+This repo, however is having the lastes version, therefore sometimes it may not work as expected. 
 
-```let e2e = require('recheck-clientjs-library')```
+You can run this repo in four different ways: 
 
-[beta.recheck.io](https://beta.recheck.io/) can be used as playground server, so in the library you have to hardcode at the start of the file:
+```npm run beta ``` - it will run the app with config for connection to beta.recheck.io
 
-```
-let baseUrl = 'https://beta.recheck.io';
-let network = "ae";
-```
+```npm run local_ae``` - it will run the app with config for localhost:3000 and AEthernity blockchain.
 
-Since you are (probably) going to locally host the webapp, _init()_ is going to create some problems, so to pass it by for now this is a workable solution. 
+```npm run local_eth``` - it will run the app with config for localhost:3000 and Ethereum blockchain.
+
+
+```npm run beta_eth``` - it will connect you to the beta, however at the moment, the test environment is running on AEthernity blockchain.
+
+### Steps to work with the app 
+1. Once you start the app you will be asked to create an identity. This identity will be stored on the browser's cache. 
+2. You can interact with the server by scanning the QR codes according to the current action you want to execute. 

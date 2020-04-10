@@ -1,5 +1,4 @@
 const Console = require('../logger')
-// var e2e = require('./clientLib.js').default
 let e2e = require('recheck-clientjs-library')
 var aes256 = require('aes256')
 
@@ -10,14 +9,20 @@ var keyPair = null
 let baseHost = window.location.hostname
 let basePort = window.location.port
 let apiUrl = window.location.protocol + '//' + baseHost + ':' + basePort
-    apiUrl = 'http://localhost:3000';
+    apiUrl = process.env.NODE_ENV;
 //  apiUrl = 'https://beta.recheck.io'
 
 
 export default {
+  setURLandNetwork: function(apiUrl, network){
+    e2e.init(apiUrl, network);
+  },
+
   init: async function (password) {
     Console.log('init')
     e2e.init(apiUrl)
+    console.log("ei tvaaaaaaaaaaaaaaaaaaaa" + apiUrl);
+    
     if (!localStorage.walletAe1) {
       Console.log('Wallet does not exist yet. Will create one.')
       keyPair = await e2e.newKeyPair(null)

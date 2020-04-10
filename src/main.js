@@ -16,7 +16,6 @@ var notifier;
 Vue.use(SocialSharing);
 
 (async () => {
-
   var userAgent = window.navigator.userAgent;
   if (userAgent.match(/iPad/i) || userAgent.match(/iPhone/i)) {
     Console.log('Safari Mobile')
@@ -87,6 +86,19 @@ Vue.use(SocialSharing);
         let params = new URLSearchParams(uri);
         isChallengeUrl = params.get('c')
         let apiUrl = 'https://' + window.location.hostname + ':' + window.location.port
+        let environment = process.env.NODE_ENV
+        let local = "http://localhost:3000"
+        let beta ="https://beta.recheck.io"
+        console.log(environment);
+        
+        if(environment.startsWith("local"))
+        {
+          apiUrl = local
+        }
+        else {
+          apiUrl = beta
+        }
+                
         Console.log('isChallengeUrl', isChallengeUrl)
         Console.log('apiUrl', apiUrl)
         let urlChallenge = ''; 

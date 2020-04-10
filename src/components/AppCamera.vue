@@ -79,6 +79,23 @@ import Console from '../logger'
 
 export default {
   mounted () {
+
+    if(this.environment.startsWith("localAE"))
+      {
+        chain.setURLandNetwork(this.local, "ae")
+      }
+    else if(this.environment.startsWith("localETH"))
+      {
+        chain.setURLandNetwork(this.local,"eth")
+      }
+    else if (this.environment.startsWith("betaAE"))
+      {
+        chain.setURLandNetwork(this.beta,"ae");
+      }
+    else if (this.environment.startsWith("betaETH"))
+      {
+        chain.setURLandNetwork(this.beta,"eth"); 
+      }
     this.pinned = chain.pinned()
     this.$root.$emit('badge_off')
     Console.log('mounted: omitCamera', this.omitCamera)
@@ -91,6 +108,9 @@ export default {
     return {
       omitCamera: this.$route.params.omitCamera,
       urlChallenge: this.$route.params.challenge,
+      local:"http://localhost:3000",
+      beta:"https://beta.recheck.io",
+      environment: process.env.NODE_ENV,
       error: '',
       dialog: false,
       resolve: null,
@@ -158,9 +178,7 @@ export default {
     doExecSelection () {
       this.$root.$emit('progress_on')
 
-      chain.doExecSelection(this.pin, this.qrResult, (err) => {
-        console.log("ei toq", this.qrResult);
-        
+      chain.doExecSelection(this.pin, this.qrResult, (err) => {        
         this.$root.$emit('progress_off')
         if (!err) {
           if (this.pinCase === 'decrypt') {
@@ -219,7 +237,7 @@ export default {
                 this.showPinDialog = true
               } else {                
                 this.doExecSelection()
-              }
+              }3000
             } else {
               Console.log("AFTER LOGIN");
               router.push('/')
@@ -249,8 +267,7 @@ export default {
             this.$root.$emit('progress_off')
             router.push('/')
           })
-      } else if (qrResult.startsWith('bo:') || qrResult.startsWith("mo")) {
-        qrResult = qrResult.replace("bo", "mo");
+      } else if (qrResult.startsWith('re:')) {
         this.pinCase = 'decrypt'
         this.open('Document Decrypt Request', 'You are about to decrypt a document. Are you sure?')
           .then((resolved) => {            

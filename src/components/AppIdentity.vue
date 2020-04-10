@@ -153,7 +153,6 @@ export default {
     if (this.pinned) {
       this.publicAddress = localStorage.publicAddress;
     }
-    this.getUsername();
   },
   data() {
     return {
@@ -335,15 +334,6 @@ export default {
       this.pin2 = "";
       this.pin = "";
       this.showPinDialog = false;
-    },
-    getUsername() {
-      chain.getUserData(this.publicAddress, res => {
-        if (res.data.company != null && res.data.company != "") {
-          this.username = res.data.company;
-        } else {
-          this.username = "Create a username in Recheck Docs";
-        }
-      });
     },
     copyStringToClipboard(str) {
       // Create new element
