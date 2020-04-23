@@ -20,9 +20,7 @@ export default {
 
   init: async function (password) {
     Console.log('init')
-    e2e.init(apiUrl)
-    console.log("ei tvaaaaaaaaaaaaaaaaaaaa" + apiUrl);
-    
+    e2e.init(apiUrl)    
     if (!localStorage.walletAe1) {
       Console.log('Wallet does not exist yet. Will create one.')
       keyPair = await e2e.newKeyPair(null)
@@ -156,9 +154,7 @@ export default {
     } 
 
     try {
-      await e2e.login(keyPair)
-      console.log("toz keypair", keyPair);
-      
+      await e2e.login(keyPair)      
       let token = await e2e.execSelection(_selection, keyPair)
       Console.log(token)
       callback(false)

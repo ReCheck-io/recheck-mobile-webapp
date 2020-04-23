@@ -27,7 +27,7 @@
     "eth-crypto": "^1.5.2",
     "firebase": "^5.11.1",
     "keccak256": "^1.0.0",
-    "recheck-clientjs-library": "^1.0.9",
+    "recheck-clientjs-library": "^1.0.11",
     "register-service-worker": "^1.7.1",
     "secp256k1": "^3.8.0",
     "session25519": "^1.1.0",

@@ -88,9 +88,7 @@ Vue.use(SocialSharing);
         let apiUrl = 'https://' + window.location.hostname + ':' + window.location.port
         let environment = process.env.NODE_ENV
         let local = "http://localhost:3000"
-        let beta ="https://beta.recheck.io"
-        console.log(environment);
-        
+        let beta ="https://beta.recheck.io"        
         if(environment.startsWith("local"))
         {
           apiUrl = local

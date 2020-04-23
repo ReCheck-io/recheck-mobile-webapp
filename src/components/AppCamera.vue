@@ -79,7 +79,6 @@ import Console from '../logger'
 
 export default {
   mounted () {
-
     if(this.environment.startsWith("localAE"))
       {
         chain.setURLandNetwork(this.local, "ae")
@@ -88,14 +87,15 @@ export default {
       {
         chain.setURLandNetwork(this.local,"eth")
       }
-    else if (this.environment.startsWith("betaAE"))
-      {
-        chain.setURLandNetwork(this.beta,"ae");
-      }
     else if (this.environment.startsWith("betaETH"))
       {
         chain.setURLandNetwork(this.beta,"eth"); 
       }
+    else
+      {
+        chain.setURLandNetwork(this.beta,"ae");
+      }
+
     this.pinned = chain.pinned()
     this.$root.$emit('badge_off')
     Console.log('mounted: omitCamera', this.omitCamera)
