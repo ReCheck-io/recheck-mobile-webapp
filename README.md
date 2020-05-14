@@ -1,4 +1,4 @@
-[![Website recheck.io](https://img.shields.io/badge/Website-recheck.io-brightgreen.svg)](https://recheck.io/)<a href="https://discord.gg/a2S6WX"><img src="https://img.shields.io/discord/675683560673509386?logo=discord" alt="chat on Discord"></a>
+[![Website recheck.io](https://img.shields.io/badge/Website-recheck.io-brightgreen.svg)](https://recheck.io/)<a href="https://discord.gg/3KwFw72"><img src="https://img.shields.io/discord/675683560673509386?logo=discord" alt="chat on Discord"></a>
 # recheck-mobile-webapp
 This is the app we use for storage of keys and working on the phone through our service. :)
 
