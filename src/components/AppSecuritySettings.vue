@@ -15,17 +15,18 @@
         <v-spacer></v-spacer>
       </v-card-actions>
     </v-card>
- 
-  <div style="margin:1rem;" />
-      <v-card dark class="rounded-card">
-         <v-toolbar color="#16415c" fflat>
+
+    <div style="margin:1rem;" />
+    <v-card dark class="rounded-card">
+      <v-toolbar color="#16415c" fflat>
         <v-toolbar-title class="white--text">Time for PIN automation</v-toolbar-title>
       </v-toolbar>
       <v-card-text>
         Or set for
         <strong>how much minutes</strong> do you wish your PIN to be remembered
         for. Right now it is set at
-        <br /><br />
+        <br />
+        <br />
         <h3>{{this.$store.state.timeToRemember/60000}} minutes.</h3>
       </v-card-text>
       <v-card-actions class="pt-0">
@@ -94,8 +95,9 @@ export default {
     dropdown_time: [{ text: "5" }, { text: "10" }, { text: "15" }],
     pinDialog: 0,
     pin: "",
-    pin1: "",
-    pin2: "",
+    pinOld: "",
+    pinNew: "",
+    pinNewPINConfirm: "",
     pinMessage: "Enter your PIN",
     showPinDialog: false,
     PINchange: false,
@@ -126,8 +128,22 @@ export default {
             "red"
           );
         } else {
+          this.pinMessage = "Enter your new PIN";
+          this.pinOld = this.pin;
+          this.pin = "";
+          this.pinDialog = 4;
+          this.showPinDialog = true;
+        }
+      } else if (this.pinDialog === 4) {
+        if (this.pin.length < 4) {
+          this.$root.$emit(
+            "error_on",
+            "PIN must be at least 4 characters long!",
+            "red"
+          );
+        } else {
           this.pinMessage = "Please repeat your new PIN";
-          this.pin1 = this.pin;
+          this.pinNew = this.pin;
           this.pin = "";
           this.pinDialog = 5;
           this.showPinDialog = true;
@@ -143,24 +159,34 @@ export default {
             "red"
           );
         } else {
-          this.pin2 = this.pin;
+          this.pinNewPINConfirm = this.pin;
           this.showPinDialog = false;
-          this.$root.$emit("progress_on");
-          if (chain.resetPIN(this.pin1, this.pin2)) {
-            this.pinned = chain.pinned();
-            this.$root.$emit("walletEvent");
-            this.$root.$emit("progress_off");
-            this.$root.$emit("error_on", "PIN changed successfully!", "green");
+          if (this.pinNew === this.pinNewPINConfirm) {
+            this.$root.$emit("progress_on");
+            if (chain.resetPIN(this.pinOld, this.pinNewPINConfirm)) {
+              this.pinned = chain.pinned();
+              this.$root.$emit("walletEvent");
+              this.$root.$emit("progress_off");
+              this.$root.$emit(
+                "error_on",
+                "PIN changed successfully!",
+                "green"
+              );
+            } else {
+              this.$root.$emit("progress_off");
+              this.$root.$emit("error_on", "Old PIN mismatch", "red");
+            }
           } else {
             this.$root.$emit("progress_off");
-            this.$root.$emit("error_on", "Old PIN mismatch", "red");
+            this.$root.$emit("error_on", "New PIN confirmation mismatch", "red");
           }
         }
       }
     },
     cancelPin() {
-      this.pin1 = "";
-      this.pin2 = "";
+      this.pinOld = "";
+      this.pinNew = "";
+      this.pinNewPINConfirm = "";
       this.pin = "";
       this.showPinDialog = false;
       this.pinDialog = 0;
