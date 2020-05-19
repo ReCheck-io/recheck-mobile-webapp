@@ -55,7 +55,6 @@ export default {
         {icon:'assignment_ind', text:'My Identity', route:'/identity'},
         {icon:'settings_applications', text:'Security Settings', route:'/securitysettings'},
         {icon:'notes', text:'Terms and Privacy', route:'/termsandprivacy'},
-        {icon:'info', text:'About', route:'/about'},
         {icon:'help', text:'Help', route:'/help'},
         
         // {icon:'supervisor_account', text:'Contacts', route:'/identity'},

@@ -14,11 +14,6 @@ const AppIdentity = resolve => {
     resolve(require('@/components/AppIdentity'))
   });
 }
-const About = resolve => {
-  require.ensure(['@/components/infoPages/About'], () => {
-    resolve(require('@/components/infoPages/About'))
-  });
-}
 const Help = resolve => {
   require.ensure(['@/components/infoPages/Help'], () => {
     resolve(require('@/components/infoPages/Help'))
@@ -60,12 +55,6 @@ export default new Router({
       name: 'AppSecuritySettings',
       default: true,
       component: AppSecuritySettings
-    },
-    {
-      path: '/about',
-      name: 'About',
-      default: true,
-      component: About
     },
     {
       path: '/help',
