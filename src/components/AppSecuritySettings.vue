@@ -49,6 +49,23 @@
     </v-card>
     <div style="margin:1rem;" />
 
+    <v-card dark class="rounded-card">
+      <v-toolbar color="#16415c" fflat>
+        <v-toolbar-title class="white--text">Create new identity</v-toolbar-title>
+      </v-toolbar>
+      <v-card-text>
+        <strong>
+          Creating new Identity will remove the previous one. If you have not saved the phrase for your current identity
+          it will be lost FOREVER.
+        </strong>
+      </v-card-text>
+      <v-card-actions class="pt-0">
+        <v-spacer></v-spacer>
+        <v-btn @click="newIdentity" large dark color="red">Create New Identity</v-btn>
+        <v-spacer></v-spacer>
+      </v-card-actions>
+    </v-card>
+
     <v-layout row justify-center>
       <v-dialog v-model="this.showPinDialog" @keydown.esc="cancel" persistent max-width="600px">
         <v-card>
@@ -82,11 +99,44 @@
         </v-card>
       </v-dialog>
     </v-layout>
+
+    <v-layout row justify-center>
+      <v-dialog
+        v-model="this.showChangeIdentityDialog"
+        @keydown.esc="cancel"
+        persistent
+        max-width="600px"
+      >
+        <v-card>
+          <v-toolbar color="#16415c" dark dense flat>
+            <v-toolbar-title class="white--text">Changing Identity</v-toolbar-title>
+          </v-toolbar>
+          <v-card-text>
+            <v-container grid-list-md>
+              <v-layout wrap>
+                <v-flex xs12>
+                  <v-card-text v-show="!!pinMessage">
+                    <strong>{{ pinMessage }}</strong>
+                  </v-card-text>
+                </v-flex>
+              </v-layout>
+            </v-container>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="gray" dark @click="cancelPin">Cancel</v-btn>
+            <v-btn color="green" dark @click="confirmNewIdentity">Confirm</v-btn>
+            <v-spacer></v-spacer>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-layout>
   </div>
 </template>
 
 <script>
 import chain from "../chain";
+import router from "../router";
 
 // const Console = require("../logger");
 
@@ -100,10 +150,32 @@ export default {
     pinNewPINConfirm: "",
     pinMessage: "Enter your PIN",
     showPinDialog: false,
+    showChangeIdentityDialog: false,
     PINchange: false,
     pinned: false
   }),
   methods: {
+    newIdentity() {
+      this.pinMessage = "Are you really sure you want to create a new Identiy";
+      this.pinDialog = 10;
+      this.$root.$emit("progress_on");
+      setTimeout(() => {this.showChangeIdentityDialog = true
+      this.$root.$emit("progress_off")}, 3000);
+      
+    },
+
+    confirmNewIdentity() {
+      if (this.pinDialog === 10) {
+        this.pinMessage =
+          "Are you really sure you want to create new identity ? You will lose the current one!";
+        this.pinDialog = 11;
+        this.showChangeIdentityDialog = true;
+      } else if (this.pinDialog === 11) {
+        localStorage.clear();
+        router.push("/identity");
+      }
+    },
+
     changePIN() {
       if (!this.$store.state.automatedPIN) {
         this.pin = "";
@@ -119,6 +191,7 @@ export default {
         );
       }
     },
+
     confirmPin() {
       if (this.pinDialog === 3) {
         if (this.pin.length < 4) {
@@ -178,7 +251,11 @@ export default {
             }
           } else {
             this.$root.$emit("progress_off");
-            this.$root.$emit("error_on", "New PIN confirmation mismatch", "red");
+            this.$root.$emit(
+              "error_on",
+              "New PIN confirmation mismatch",
+              "red"
+            );
           }
         }
       }
@@ -190,6 +267,7 @@ export default {
       this.pin = "";
       this.showPinDialog = false;
       this.pinDialog = 0;
+      this.showChangeIdentityDialog = false;
     },
     timeToRemember(time) {
       time = time * 60000;
