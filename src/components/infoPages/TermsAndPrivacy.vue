@@ -8,7 +8,7 @@
         <v-card-text>
           <div style="margin-top:20px;"/>
           <div class="breakchars"><p>
-             Soon...</p></div>
+             Coming soon...</p></div>
           <div style="margin-top:20px;"/>
         </v-card-text>
     </v-card>

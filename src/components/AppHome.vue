@@ -18,7 +18,7 @@
         </v-img>
         <v-card-title>
           <div>
-            Thank you for using ReCheck Docs. You can now login and sign documents by just scanning QR codes.
+            Thank you for using ReCheck Mobile. You can now login and sign documents by just scanning QR codes.
           </div>
         </v-card-title>
         <v-card-actions>
