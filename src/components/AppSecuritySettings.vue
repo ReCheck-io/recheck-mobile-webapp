@@ -1,7 +1,22 @@
 <template>
   <div class="componentTitle">
     <div style="margin:5rem;" />
-    <v-card dark class="rounded-card">
+    
+     <v-card v-if="!this.pinned" dark class="rounded-card">
+      <v-toolbar color="#16415c" fflat>
+        <v-toolbar-title class="white--text">Create an identity first</v-toolbar-title>
+      </v-toolbar>
+      <v-card-text>
+        You have to create an identity first in order to use our service.
+      </v-card-text>
+      <v-card-actions class="pt-0">
+        <v-spacer></v-spacer>
+        <v-btn @click="goToIdentity" large dark color="green">Go to Identity</v-btn>
+        <v-spacer></v-spacer>
+      </v-card-actions>
+    </v-card>
+
+    <v-card v-if="this.pinned" dark class="rounded-card">
       <v-toolbar color="#16415c" fflat>
         <v-toolbar-title class="white--text">Manage your PIN</v-toolbar-title>
       </v-toolbar>
@@ -17,7 +32,7 @@
     </v-card>
 
     <div style="margin:1rem;" />
-    <v-card dark class="rounded-card">
+    <v-card v-if="this.pinned" dark class="rounded-card">
       <v-toolbar color="#16415c" fflat>
         <v-toolbar-title class="white--text">Time for PIN automation</v-toolbar-title>
       </v-toolbar>
@@ -49,7 +64,7 @@
     </v-card>
     <div style="margin:1rem;" />
 
-    <v-card dark class="rounded-card">
+    <v-card v-if="this.pinned" dark class="rounded-card">
       <v-toolbar color="#16415c" fflat>
         <v-toolbar-title class="white--text">Create new identity</v-toolbar-title>
       </v-toolbar>
@@ -141,6 +156,9 @@ import router from "../router";
 // const Console = require("../logger");
 
 export default {
+   mounted() {
+    this.pinned = chain.pinned();
+  },
   data: () => ({
     dropdown_time: [{ text: "5" }, { text: "10" }, { text: "15" }],
     pinDialog: 0,
@@ -155,6 +173,9 @@ export default {
     pinned: false
   }),
   methods: {
+    goToIdentity(){
+      router.push("/identity")
+    },
     newIdentity() {
       this.pinMessage = "Are you really sure you want to create a new Identiy";
       this.pinDialog = 10;

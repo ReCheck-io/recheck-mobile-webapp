@@ -39,6 +39,17 @@
         <v-btn @click="createIdentity" large dark color="green">Create Identity</v-btn>
         <v-spacer></v-spacer>
       </v-card-actions>
+    </v-card> <div v-if="!this.pinned" style="margin:1rem;" />
+    <v-card v-if="!pinned" dark class="rounded-card">
+      <v-toolbar color="#16415c" flat>
+        <v-toolbar-title class="white--text">Restore Identity</v-toolbar-title>
+      </v-toolbar>
+      <v-card-text>If you already have an identity and keep your secret phrase, you can restore it. You will be asked to create and remember your personal security PIN.</v-card-text>
+      <v-card-actions class="pt-0">
+        <v-spacer></v-spacer>
+        <v-btn @click="restoreIdentityAtStart" large dark color="green">Restore Identity</v-btn>
+        <v-spacer></v-spacer>
+      </v-card-actions>
     </v-card>
     <v-dialog data-app="true" v-model="privateKeyDialog">
       <v-card>
@@ -184,12 +195,18 @@ export default {
       this.pinDialog = 3;
       this.showPinDialog = true;
     },
+    restoreIdentityAtStart(){
+      this.check = false;
+      this.pin = "";
+      this.pinMessage = "Please choose a new PIN";
+      this.pinDialog = 10;
+      this.showPinDialog = true;
+    },
 
     copyToClipboard() {
       let valueToCopy = document.querySelector("#clipboardInput");
       valueToCopy.setAttribute("type", "text");
       valueToCopy.select();
-
       try {
         var successful = document.execCommand("copy");
         if (successful) {
@@ -229,6 +246,7 @@ export default {
           this.pinDialog = 2;
           this.showPinDialog = true;
           this.pinMessage = "Please enter your PIN";
+          this.privateKey = "";
         } else {
           if (chain.loadWallet(this.returnRememberedPIN) !== "authError") {
           this.privateKey = chain.wallet().phrase;
@@ -238,7 +256,21 @@ export default {
     },
 
     async doRestoreIdentity() {
-      if (chain.loadWallet(this.pin) !== "authError") {
+      if(!chain.pinned()){
+        Console.log("new privateKey", this.privateKey);
+        this.$root.$emit("progress_on");
+        await chain.restoreIdentityAtStart(this.pin, this.privateKey);
+        this.$root.$emit("progress_off");
+        this.$root.$emit("walletEvent");
+        this.$root.$emit(
+          "error_on",
+          "Identity restored successfully!",
+          "green"
+        );
+        this.importDialog = false;
+        router.push("/")
+      }
+      else if (chain.loadWallet(this.pin) !== "authError") {
         Console.log("new privateKey", this.privateKey);
         this.$root.$emit("progress_on");
         await chain.importPrivateKey(this.pin, this.privateKey);
@@ -250,6 +282,7 @@ export default {
           "green"
         );
         this.importDialog = false;
+        router.push("/")
       } else {
         this.$root.$emit("error_on", "PIN mismatch.", "red");
       }
@@ -274,7 +307,7 @@ export default {
           this.pin = this.returnRememberedPIN;
         }
         if (chain.loadWallet(this.pin) !== "authError") {
-          this.privateKey = chain.wallet().phrase;
+        
           this.importDialog = true;
           this.pinAutomation(this.returnAutomation, this.pin);
         } else {
@@ -296,7 +329,37 @@ export default {
           this.pinDialog = 4;
           this.showPinDialog = true;
         }
-      } else if (this.pinDialog === 4) {
+      } else if (this.pinDialog === 10) {
+        if (this.pin.length < 4) {
+          this.$root.$emit(
+            "error_on",
+            "PIN must be at least 4 characters long!",
+            "red"
+          );
+        } else {
+          this.check = true;
+          this.pinMessage = "Please repeat your new PIN";
+          this.pin1 = this.pin;
+          this.pin = "";
+          this.pinDialog = 11;
+          this.showPinDialog = true;
+        }
+      }else if (this.pinDialog === 11) {
+        if (this.pin.length < 4) {
+          this.$root.$emit(
+            "error_on",
+            "PIN must be at least 4 characters long!",
+            "red"
+          );
+        } else {
+        this.pin2 = this.pin;
+        if (this.pin1 === this.pin2) {
+          this.showPinDialog = false;
+          this.importDialog = true;
+        }
+       }
+      } 
+      else if (this.pinDialog === 4) {
         this.pin2 = this.pin;
         if (this.pin1 === this.pin2) {
           this.check = true;

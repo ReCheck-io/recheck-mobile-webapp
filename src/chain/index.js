@@ -14,8 +14,9 @@ let apiUrl = window.location.protocol + '//' + baseHost + ':' + basePort
 
 
 export default {
-  setURLandNetwork: function(apiUrl, network){
-    e2e.init(apiUrl, network);
+  setURLandNetwork: function(apiURL, network){
+    apiUrl = apiURL;
+    e2e.init(apiURL, network);
   },
 
   init: async function (password) {
@@ -107,15 +108,19 @@ export default {
     return true
   },
 
-  importPrivateKey: async function (password, phrase) {
-    if (!this.checkPassword(password)) {
-      return 'authError'
-    }
+  restoreIdentityAtStart: async function(password, phrase){
     this.resetWallet()
     keyPair = await e2e.newKeyPair(phrase)
     wallet = JSON.stringify(keyPair)
     this.saveWallet(keyPair, password)
     return true
+  },
+
+  importPrivateKey: async function (password, phrase) {
+    if (!this.checkPassword(password)) {
+      return 'authError'
+    }
+    this.restoreIdentityAtStart(password,phrase)
   },
 
   doLogin: async function (password, _challenge, callback) {
