@@ -2,7 +2,7 @@
   <div>
     <v-toolbar color="#16415c" dark fixed>
       <v-toolbar-side-icon class="grey--text" @click="drawer = !drawer"></v-toolbar-side-icon>
-      <v-toolbar-title>Recheck Mobile</v-toolbar-title>
+      <v-toolbar-title @click="atHome">Recheck Mobile</v-toolbar-title>
       <v-spacer></v-spacer>
       <router-link to="/scan">
         <v-btn flat icon>
@@ -43,6 +43,7 @@
 </template>
 
 <script>
+import router from '../router';
 
 export default {
   data() {
@@ -69,6 +70,11 @@ export default {
       this.badge = false;
     });
   },
+  methods:{
+    atHome(){
+      router.push("/");
+    }
+  }
   
 };
 </script>

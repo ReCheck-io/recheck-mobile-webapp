@@ -3,15 +3,15 @@
     <div style="margin:5rem;" />
     
      <v-card v-if="!this.pinned" dark class="rounded-card">
-      <v-toolbar color="#16415c" fflat>
-        <v-toolbar-title class="white--text">Create an identity first</v-toolbar-title>
+      <v-toolbar color="red" fflat>
+        <v-toolbar-title class="white--text">Identity Required</v-toolbar-title>
       </v-toolbar>
       <v-card-text>
         You have to create an identity first in order to use our service.
       </v-card-text>
       <v-card-actions class="pt-0">
         <v-spacer></v-spacer>
-        <v-btn @click="goToIdentity" large dark color="green">Go to Identity</v-btn>
+        <v-btn @click="goToIdentity"  dark color="blue">Identity Settings</v-btn>
         <v-spacer></v-spacer>
       </v-card-actions>
     </v-card>
