@@ -39,7 +39,8 @@
         <v-btn @click="createIdentity" large dark color="green">Create Identity</v-btn>
         <v-spacer></v-spacer>
       </v-card-actions>
-    </v-card> <div v-if="!this.pinned" style="margin:1rem;" />
+    </v-card>
+    <div v-if="!this.pinned" style="margin:1rem;" />
     <v-card v-if="!pinned" dark class="rounded-card">
       <v-toolbar color="#16415c" flat>
         <v-toolbar-title class="white--text">Restore Identity</v-toolbar-title>
@@ -130,9 +131,7 @@
             <v-spacer></v-spacer>
             <input type="checkbox" id="checkbox" @click="hint = !hint" v-model="automation" />
             &nbsp;&nbsp;
-            <label
-              for="checkbox"
-            >Remember your PIN </label>
+            <label for="checkbox">Remember your PIN</label>
 
             <v-spacer></v-spacer>
           </v-card-actions>
@@ -184,10 +183,18 @@ export default {
       username: "",
       automation: false,
       hint: false,
-      check: true,
+      check: true
     };
   },
   methods: {
+    seedCheck(seedPhrase) {
+      if (seedPhrase.split(" ").length == 12) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+
     createIdentity() {
       this.check = false;
       this.pin = "";
@@ -195,7 +202,7 @@ export default {
       this.pinDialog = 3;
       this.showPinDialog = true;
     },
-    restoreIdentityAtStart(){
+    restoreIdentityAtStart() {
       this.check = false;
       this.pin = "";
       this.pinMessage = "Please choose a new PIN";
@@ -227,64 +234,71 @@ export default {
     },
 
     backupIdentity() {
-        if (chain.pinned() && !this.$store.state.automatedPIN) {
-          this.pin = "";
-          this.pinDialog = 1;
-          this.showPinDialog = true;
-          this.pinMessage = "Please enter your PIN";
-        } else {
-           if (chain.loadWallet(this.returnRememberedPIN) !== "authError") {
+      if (chain.pinned() && !this.$store.state.automatedPIN) {
+        this.pin = "";
+        this.pinDialog = 1;
+        this.showPinDialog = true;
+        this.pinMessage = "Please enter your PIN";
+      } else {
+        if (chain.loadWallet(this.returnRememberedPIN) !== "authError") {
           this.privateKey = chain.wallet().phrase;
           this.privateKeyDialog = true;
-           }
         }
+      }
     },
 
     restoreIdentity() {
-        if (chain.pinned() && !this.$store.state.automatedPIN) {
-          this.pin = "";
-          this.pinDialog = 2;
-          this.showPinDialog = true;
-          this.pinMessage = "Please enter your PIN";
-          this.privateKey = "";
-        } else {
-          if (chain.loadWallet(this.returnRememberedPIN) !== "authError") {
+      if (chain.pinned() && !this.$store.state.automatedPIN) {
+        this.pin = "";
+        this.pinDialog = 2;
+        this.showPinDialog = true;
+        this.pinMessage = "Please enter your PIN";
+        this.privateKey = "";
+      } else {
+        if (chain.loadWallet(this.returnRememberedPIN) !== "authError") {
           this.privateKey = chain.wallet().phrase;
           this.importDialog = true;
         }
-        } 
+      }
     },
 
     async doRestoreIdentity() {
-      if(!chain.pinned()){
-        Console.log("new privateKey", this.privateKey);
-        this.$root.$emit("progress_on");
-        await chain.restoreIdentityAtStart(this.pin, this.privateKey);
-        this.$root.$emit("progress_off");
-        this.$root.$emit("walletEvent");
-        this.$root.$emit(
-          "error_on",
-          "Identity restored successfully!",
-          "green"
-        );
-        this.importDialog = false;
-        router.push("/")
-      }
-      else if (chain.loadWallet(this.pin) !== "authError") {
-        Console.log("new privateKey", this.privateKey);
-        this.$root.$emit("progress_on");
-        await chain.importPrivateKey(this.pin, this.privateKey);
-        this.$root.$emit("progress_off");
-        this.$root.$emit("walletEvent");
-        this.$root.$emit(
-          "error_on",
-          "Identity restored successfully!",
-          "green"
-        );
-        this.importDialog = false;
-        router.push("/")
+      if (this.seedCheck(this.privateKey)) {
+        if (!chain.pinned()) {
+          Console.log("new privateKey", this.privateKey);
+          this.$root.$emit("progress_on");
+          await chain.restoreIdentityAtStart(this.pin, this.privateKey);
+          this.$root.$emit("progress_off");
+          this.$root.$emit("walletEvent");
+          this.$root.$emit(
+            "error_on",
+            "Identity restored successfully!",
+            "green"
+          );
+          this.importDialog = false;
+          router.push("/");
+        } else if (chain.loadWallet(this.pin) !== "authError") {
+          Console.log("new privateKey", this.privateKey);
+          this.$root.$emit("progress_on");
+          await chain.importPrivateKey(this.pin, this.privateKey);
+          this.$root.$emit("progress_off");
+          this.$root.$emit("walletEvent");
+          this.$root.$emit(
+            "error_on",
+            "Identity restored successfully!",
+            "green"
+          );
+          this.importDialog = false;
+          router.push("/");
+        } else {
+          this.$root.$emit("error_on", "PIN mismatch.", "red");
+        }
       } else {
-        this.$root.$emit("error_on", "PIN mismatch.", "red");
+        this.$root.$emit(
+          "error_on",
+          "The secret phrase have to be 12 words.",
+          "red"
+        );
       }
     },
 
@@ -307,7 +321,6 @@ export default {
           this.pin = this.returnRememberedPIN;
         }
         if (chain.loadWallet(this.pin) !== "authError") {
-        
           this.importDialog = true;
           this.pinAutomation(this.returnAutomation, this.pin);
         } else {
@@ -344,7 +357,7 @@ export default {
           this.pinDialog = 11;
           this.showPinDialog = true;
         }
-      }else if (this.pinDialog === 11) {
+      } else if (this.pinDialog === 11) {
         if (this.pin.length < 4) {
           this.$root.$emit(
             "error_on",
@@ -352,14 +365,13 @@ export default {
             "red"
           );
         } else {
-        this.pin2 = this.pin;
-        if (this.pin1 === this.pin2) {
-          this.showPinDialog = false;
-          this.importDialog = true;
+          this.pin2 = this.pin;
+          if (this.pin1 === this.pin2) {
+            this.showPinDialog = false;
+            this.importDialog = true;
+          }
         }
-       }
-      } 
-      else if (this.pinDialog === 4) {
+      } else if (this.pinDialog === 4) {
         this.pin2 = this.pin;
         if (this.pin1 === this.pin2) {
           this.check = true;
@@ -441,7 +453,7 @@ export default {
     async rememberPIN(userPIN) {
       this.$store.dispatch("startTiming", userPIN);
       await this.$store.dispatch("deadline");
-    },
+    }
   },
   computed: {
     returnPINState() {
