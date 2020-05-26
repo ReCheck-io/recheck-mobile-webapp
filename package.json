@@ -3,10 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "beta": "NODE_ENV=\"betaAE\" npm run serve",
-    "beta_eth": "NODE_ENV=\"betaETH\" npm run serve",
-    "local_ae": "NODE_ENV=\"localAE\" npm run serve",
-    "local_eth": "NODE_ENV=\"localETH\" npm run serve",
+    "beta": "NODE_ENV=\"https://beta.recheck.io,ae\" npm run serve",
+    "beta_eth": "NODE_ENV=\"https://beta.recheck.io,eth\" npm run serve",
+    "local_ae": "NODE_ENV=\"http://localhost:3000,ae\" npm run serve",
+    "local_eth": "NODE_ENV=\"http://localhost:3000,eth\" npm run serve",
+    "local_ae_build":"NODE_ENV=\"http://localhost:3000,ae\" npm run build",
+    "beta_build":"NODE_ENV=\"https://beta.recheck.io,ae\" npm run build",
+    "ipOcean": "NODE_ENV=\"https://chain.ipocean.com,eth\" npm run build",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"

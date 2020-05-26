@@ -85,18 +85,8 @@ Vue.use(SocialSharing);
         let uri = window.location.search.substring(1); 
         let params = new URLSearchParams(uri);
         isChallengeUrl = params.get('c')
-        let apiUrl = 'https://' + window.location.hostname + ':' + window.location.port
-        let environment = process.env.NODE_ENV
-        let local = "http://localhost:3000"
-        let beta ="https://beta.recheck.io"        
-        if(environment.startsWith("local"))
-        {
-          apiUrl = local
-        }
-        else {
-          apiUrl = beta
-        }
-                
+        let environment = process.env.NODE_ENV.split(",")
+        let apiUrl = environment[0]
         Console.log('isChallengeUrl', isChallengeUrl)
         Console.log('apiUrl', apiUrl)
         let urlChallenge = ''; 

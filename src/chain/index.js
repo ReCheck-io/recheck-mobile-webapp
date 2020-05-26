@@ -1,18 +1,14 @@
 const Console = require('../logger')
 let e2e = require('recheck-clientjs-library')
 var aes256 = require('aes256')
+import axios from 'axios'
 
 // eslint-disable-next-line
 var wallet = null
 var keyPair = null
 
-let baseHost = window.location.hostname
-let basePort = window.location.port
-let apiUrl = window.location.protocol + '//' + baseHost + ':' + basePort
-    apiUrl = process.env.NODE_ENV;
-//  apiUrl = 'https://beta.recheck.io'
-
-
+let environment = process.env.NODE_ENV.split(",")
+let apiUrl = environment[0]
 export default {
   setURLandNetwork: function(apiURL, network){
     apiUrl = apiURL;
@@ -108,6 +104,16 @@ export default {
     return true
   },
 
+  checkUser: async function (api,userID, callback) {
+    axios.get(api + '/user/check?userId=' + userID)
+      .then((res) => {
+        callback(res.data);
+      })
+      .catch((err) => {
+        Console.log('checkUser:', err)
+        callback(null)
+      })
+  },
   restoreIdentityAtStart: async function(password, phrase){
     this.resetWallet()
     keyPair = await e2e.newKeyPair(phrase)

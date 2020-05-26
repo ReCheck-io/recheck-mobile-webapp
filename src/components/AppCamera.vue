@@ -79,23 +79,7 @@ import Console from '../logger'
 
 export default {
   mounted () {
-    if(this.environment.startsWith("localAE"))
-      {
-        chain.setURLandNetwork(this.local, "ae")
-      }
-    else if(this.environment.startsWith("localETH"))
-      {
-        chain.setURLandNetwork(this.local,"eth")
-      }
-    else if (this.environment.startsWith("betaETH"))
-      {
-        chain.setURLandNetwork(this.beta,"eth"); 
-      }
-    else
-      {
-        chain.setURLandNetwork(this.beta,"ae");
-      }
-
+    chain.setURLandNetwork(this.environment[0],this.environment[1]);
     this.pinned = chain.pinned()
     this.$root.$emit('badge_off')
     Console.log('mounted: omitCamera', this.omitCamera)
@@ -108,9 +92,7 @@ export default {
     return {
       omitCamera: this.$route.params.omitCamera,
       urlChallenge: this.$route.params.challenge,
-      local:"http://localhost:3000",
-      beta:"https://beta.recheck.io",
-      environment: process.env.NODE_ENV,
+      environment: process.env.NODE_ENV.split(","),
       error: '',
       dialog: false,
       resolve: null,

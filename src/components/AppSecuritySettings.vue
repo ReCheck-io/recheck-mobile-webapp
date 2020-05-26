@@ -1,17 +1,15 @@
 <template>
   <div class="componentTitle">
     <div style="margin:5rem;" />
-    
-     <v-card v-if="!this.pinned" dark class="rounded-card">
+
+    <v-card v-if="!this.pinned" dark class="rounded-card">
       <v-toolbar color="red" fflat>
         <v-toolbar-title class="white--text">Identity Required</v-toolbar-title>
       </v-toolbar>
-      <v-card-text>
-        You have to create an identity first in order to use our service.
-      </v-card-text>
+      <v-card-text>You have to create an identity first in order to use our service.</v-card-text>
       <v-card-actions class="pt-0">
         <v-spacer></v-spacer>
-        <v-btn @click="goToIdentity"  dark color="blue">Identity Settings</v-btn>
+        <v-btn @click="goToIdentity" dark color="blue">Identity Settings</v-btn>
         <v-spacer></v-spacer>
       </v-card-actions>
     </v-card>
@@ -156,7 +154,7 @@ import router from "../router";
 // const Console = require("../logger");
 
 export default {
-   mounted() {
+  mounted() {
     this.pinned = chain.pinned();
   },
   data: () => ({
@@ -173,16 +171,17 @@ export default {
     pinned: false
   }),
   methods: {
-    goToIdentity(){
-      router.push("/identity")
+    goToIdentity() {
+      router.push("/identity");
     },
     newIdentity() {
       this.pinMessage = "Are you really sure you want to create a new Identiy";
       this.pinDialog = 10;
       this.$root.$emit("progress_on");
-      setTimeout(() => {this.showChangeIdentityDialog = true
-      this.$root.$emit("progress_off")}, 3000);
-      
+      setTimeout(() => {
+        this.showChangeIdentityDialog = true;
+        this.$root.$emit("progress_off");
+      }, 3000);
     },
 
     confirmNewIdentity() {
@@ -215,18 +214,26 @@ export default {
 
     confirmPin() {
       if (this.pinDialog === 3) {
-        if (this.pin.length < 4) {
-          this.$root.$emit(
-            "error_on",
-            "PIN must be at least 4 characters long!",
-            "red"
-          );
+        if (chain.checkPassword(this.pin)) {
+          if (this.pin.length < 4) {
+            this.$root.$emit(
+              "error_on",
+              "PIN must be at least 4 characters long!",
+              "red"
+            );
+          } else {
+            this.pinMessage = "Enter your new PIN";
+            this.pinOld = this.pin;
+            this.pin = "";
+            this.pinDialog = 4;
+            this.showPinDialog = true;
+          }
         } else {
-          this.pinMessage = "Enter your new PIN";
-          this.pinOld = this.pin;
-          this.pin = "";
-          this.pinDialog = 4;
-          this.showPinDialog = true;
+          this.$root.$emit(
+              "error_on",
+              "Current PIN you want to change is incorrect",
+              "red"
+            );
         }
       } else if (this.pinDialog === 4) {
         if (this.pin.length < 4) {

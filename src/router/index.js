@@ -20,8 +20,8 @@ const Help = resolve => {
   });
 }
 const TermsAndPrivacy = resolve => {
-  require.ensure(['@/components/infoPages/TermsAndPrivacy'], () => {
-    resolve(require('@/components/infoPages/TermsAndPrivacy'))
+  require.ensure(['@/components/infoPages/Privacy'], () => {
+    resolve(require('@/components/infoPages/Privacy'))
   });
 }
 const AppSecuritySettings = resolve => {
@@ -63,8 +63,8 @@ export default new Router({
       component: Help
     },
     {
-      path: '/termsandprivacy',
-      name: 'TermsAndPrivacy',
+      path: '/privacy',
+      name: 'Privacy',
       default: true,
       component: TermsAndPrivacy
     },

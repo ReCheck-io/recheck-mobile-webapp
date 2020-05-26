@@ -2,7 +2,11 @@
   <div>
     <v-toolbar color="#16415c" dark fixed>
       <v-toolbar-side-icon class="grey--text" @click="drawer = !drawer"></v-toolbar-side-icon>
-      <v-toolbar-title @click="atHome">Recheck Mobile</v-toolbar-title>
+      <v-toolbar-title 
+      @mouseover="hover = true"
+      @mouseleave="hover = false"
+      :class="{ active: hover }" @click="atHome"
+      >Recheck Mobile</v-toolbar-title>
       <v-spacer></v-spacer>
       <router-link to="/scan">
         <v-btn flat icon>
@@ -50,12 +54,13 @@ export default {
     return {
       badge: false,
       drawer: false,
+      hover:false,
       // https://material.io/resources/icons/?style=baseline
       links:[
         {icon:'home', text:'Home', route:'/'},
         {icon:'assignment_ind', text:'My Identity', route:'/identity'},
         {icon:'settings_applications', text:'Security Settings', route:'/securitysettings'},
-        {icon:'notes', text:'Terms and Privacy', route:'/termsandprivacy'},
+        {icon:'notes', text:'Terms and Privacy', route:'/privacy'},
         {icon:'help', text:'Help', route:'/help'},
         
         // {icon:'supervisor_account', text:'Contacts', route:'/identity'},
@@ -83,6 +88,9 @@ export default {
 <style scoped>
 a {
   text-decoration: none;
+}
+.active {
+  cursor:pointer;
 }
 
 </style>

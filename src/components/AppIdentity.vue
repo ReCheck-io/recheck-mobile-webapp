@@ -8,7 +8,7 @@
       <v-card-text>
         <div class="breakchars">
           <h3>{{username}}</h3>
-          <h6 color="gray" @click="copyStringToClipboard(publicAddress)">{{publicAddress}}</h6>
+          <h4 color="gray" @click="copyStringToClipboard(publicAddress)">{{publicAddress}}</h4>
         </div>
       </v-card-text>
     </v-card>
@@ -156,6 +156,7 @@ const Console = require("../logger");
 
 export default {
   mounted() {
+ 
     this.pinned = chain.pinned();
     this.$root.$on("walletEvent", () => {
       this.publicAddress = localStorage.publicAddress;
@@ -163,6 +164,7 @@ export default {
     if (this.pinned) {
       this.publicAddress = localStorage.publicAddress;
     }
+    this.isUserExisting(this.publicAddress)
   },
   data() {
     return {
@@ -183,7 +185,9 @@ export default {
       username: "",
       automation: false,
       hint: false,
-      check: true
+      check: true,
+      environment: process.env.NODE_ENV.split(","),
+
     };
   },
   methods: {
@@ -202,6 +206,13 @@ export default {
       this.pinDialog = 3;
       this.showPinDialog = true;
     },
+
+    isUserExisting(pubKey){
+      chain.checkUser(this.environment[0], pubKey, res => {
+        console.log(res)
+      }) 
+    },
+
     restoreIdentityAtStart() {
       this.check = false;
       this.pin = "";
