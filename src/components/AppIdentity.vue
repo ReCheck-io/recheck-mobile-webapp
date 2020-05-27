@@ -7,7 +7,6 @@
       </v-toolbar>
       <v-card-text>
         <div class="breakchars">
-          <h3>{{username}}</h3>
           <h4 color="gray" @click="copyStringToClipboard(publicAddress)">{{publicAddress}}</h4>
         </div>
       </v-card-text>
@@ -37,6 +36,27 @@
       <v-card-actions class="pt-0">
         <v-spacer></v-spacer>
         <v-btn @click="createIdentity" large dark color="green">Create Identity</v-btn>
+        <v-spacer></v-spacer>
+      </v-card-actions>
+    </v-card>
+    <div v-if="!this.pinned" style="margin:1rem;" />
+    <v-card v-if="!pinned" dark class="rounded-card">
+      <v-toolbar color="#16415c" flat>
+        <v-toolbar-title class="white--text">Import Identity</v-toolbar-title>
+      </v-toolbar>
+      <v-card-text>
+        If you already have 12 word secret phrase from another blockchain service, you can import
+        them and not worry about another secret phrase that you have to remember. You can use this option even if
+        you just want to pick your 12 words for the private key generation.
+        <strong>
+          Be warned, there is higher chance that someone else
+          would have your 12 words, as people are not so different and may think in similar ways from time to time.
+        </strong>
+        You will be asked to create and remember your personal security PIN.
+      </v-card-text>
+      <v-card-actions class="pt-0">
+        <v-spacer></v-spacer>
+        <v-btn @click="importIdentity" large dark color="green">Import Identity</v-btn>
         <v-spacer></v-spacer>
       </v-card-actions>
     </v-card>
@@ -156,7 +176,6 @@ const Console = require("../logger");
 
 export default {
   mounted() {
- 
     this.pinned = chain.pinned();
     this.$root.$on("walletEvent", () => {
       this.publicAddress = localStorage.publicAddress;
@@ -164,7 +183,6 @@ export default {
     if (this.pinned) {
       this.publicAddress = localStorage.publicAddress;
     }
-    this.isUserExisting(this.publicAddress)
   },
   data() {
     return {
@@ -182,16 +200,17 @@ export default {
       pinDiaog: 0,
       showPinDialog: false,
       pinMessage: "Enter your PIN",
-      username: "",
       automation: false,
       hint: false,
       check: true,
       environment: process.env.NODE_ENV.split(","),
-
+      restore: false,
+      hasIdentity: false
     };
   },
   methods: {
     seedCheck(seedPhrase) {
+      seedPhrase = seedPhrase.trim();
       if (seedPhrase.split(" ").length == 12) {
         return true;
       } else {
@@ -207,18 +226,25 @@ export default {
       this.showPinDialog = true;
     },
 
-    isUserExisting(pubKey){
+    isUserExisting(pubKey) {
       chain.checkUser(this.environment[0], pubKey, res => {
-        console.log(res)
-      }) 
+        if (res.data.userId) {
+          this.hasIdentity = true;
+        }
+      });
     },
 
-    restoreIdentityAtStart() {
+    importIdentity() {
       this.check = false;
       this.pin = "";
       this.pinMessage = "Please choose a new PIN";
       this.pinDialog = 10;
       this.showPinDialog = true;
+    },
+
+    restoreIdentityAtStart() {
+      this.restore = true;
+      this.importIdentity();
     },
 
     copyToClipboard() {
@@ -274,20 +300,49 @@ export default {
     },
 
     async doRestoreIdentity() {
+      this.privateKey = this.privateKey.trim();
       if (this.seedCheck(this.privateKey)) {
         if (!chain.pinned()) {
           Console.log("new privateKey", this.privateKey);
           this.$root.$emit("progress_on");
           await chain.restoreIdentityAtStart(this.pin, this.privateKey);
-          this.$root.$emit("progress_off");
-          this.$root.$emit("walletEvent");
-          this.$root.$emit(
-            "error_on",
-            "Identity restored successfully!",
-            "green"
-          );
+          if (this.restore) {
+            chain.loadWallet(this.pin);
+            this.isUserExisting(localStorage.publicAddress);
+            setTimeout(() => {
+              if (!this.hasIdentity) {
+                this.$root.$emit("progress_off");
+                this.$root.$emit(
+                  "error_on",
+                  "This identity has never been used! Check again!",
+                  "red"
+                );
+                chain.resetWallet();
+                localStorage.clear();
+                this.restore = false;
+                router.push('/identity')
+              } else {
+                this.$root.$emit("progress_off");
+                this.$root.$emit("walletEvent");
+                this.$root.$emit(
+                  "error_on",
+                  "Identity restored successfully!",
+                  "green"
+                );
+                 router.push("/");
+              }
+            }, 500);
+          } else {
+            this.$root.$emit("progress_off");
+            this.$root.$emit("walletEvent");
+            this.$root.$emit(
+              "error_on",
+              "Identity imported successfully!",
+              "green"
+            );
+             router.push("/");
+          }
           this.importDialog = false;
-          router.push("/");
         } else if (chain.loadWallet(this.pin) !== "authError") {
           Console.log("new privateKey", this.privateKey);
           this.$root.$emit("progress_on");
