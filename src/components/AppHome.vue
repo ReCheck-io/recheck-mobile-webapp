@@ -13,12 +13,12 @@
             </v-container>
           </v-img>
           <v-card-title>
-            <div>Thank you for using ReCheck Mobile. Register and create your own digital identity.</div>
+            <div>Thank you for using ReCheck Mobile. Sign up and create your own digital identity.</div>
           </v-card-title>
           <v-card-actions>
             <v-spacer></v-spacer>
             <router-link to="/identity">
-              <v-btn dark color="green">Register</v-btn>
+              <v-btn dark color="green">Sign up!</v-btn>
             </router-link>
             <v-spacer />
           </v-card-actions>
