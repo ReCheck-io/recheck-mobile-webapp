@@ -303,11 +303,8 @@ export default {
     },
 
     confirmPin() {
-      if (this.checkPin(this.pin)) {
-        console.log("maika ti ");
-        
+      if (this.checkPin(this.pin)) {        
         if (chain.checkPassword(this.pin)) {
-          console.log("da eba")
           if (this.pinCase === "login") {
             this.doLogin();
           } else if (this.pinCase === "decrypt") {
@@ -339,15 +336,12 @@ export default {
 
     checkPin(pin) {
       if (pin === "") {
-        console.log("tuk");
         return false;
       } else {
         if (pin === undefined) {
-          console.log("li")
           return false;
         } else {
           if (pin.length < 3) {
-            console.log("vlizash")
             return false;
           }else{
             return true
