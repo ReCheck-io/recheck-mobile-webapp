@@ -42,27 +42,6 @@
     <div v-if="!this.pinned" style="margin:1rem;" />
     <v-card v-if="!pinned" dark class="rounded-card">
       <v-toolbar color="#16415c" flat>
-        <v-toolbar-title class="white--text">Import Identity</v-toolbar-title>
-      </v-toolbar>
-      <v-card-text>
-        If you already have 12 word secret phrase from another blockchain service, you can import
-        them and not worry about another secret phrase that you have to remember. You can use this option even if
-        you just want to pick your 12 words for the private key generation.
-        <strong>
-          Be warned, there is higher chance that someone else
-          would have your 12 words, as people are not so different and may think in similar ways from time to time.
-        </strong>
-        You will be asked to create and remember your personal security PIN.
-      </v-card-text>
-      <v-card-actions class="pt-0">
-        <v-spacer></v-spacer>
-        <v-btn @click="importIdentity" large dark color="green">Import Identity</v-btn>
-        <v-spacer></v-spacer>
-      </v-card-actions>
-    </v-card>
-    <div v-if="!this.pinned" style="margin:1rem;" />
-    <v-card v-if="!pinned" dark class="rounded-card">
-      <v-toolbar color="#16415c" flat>
         <v-toolbar-title class="white--text">Restore Identity</v-toolbar-title>
       </v-toolbar>
       <v-card-text>If you already have an identity and keep your secret phrase, you can restore it. You will be asked to create and remember your personal security PIN.</v-card-text>
@@ -234,17 +213,13 @@ export default {
       });
     },
 
-    importIdentity() {
+    restoreIdentityAtStart() {
+      this.restore = true;
       this.check = false;
       this.pin = "";
       this.pinMessage = "Please choose a new PIN";
       this.pinDialog = 10;
       this.showPinDialog = true;
-    },
-
-    restoreIdentityAtStart() {
-      this.restore = true;
-      this.importIdentity();
     },
 
     copyToClipboard() {
