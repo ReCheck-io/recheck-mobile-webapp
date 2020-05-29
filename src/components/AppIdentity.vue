@@ -7,7 +7,13 @@
       </v-toolbar>
       <v-card-text>
         <div class="breakchars">
-          <h4 color="gray" @click="copyStringToClipboard(publicAddress)">{{publicAddress}}</h4>
+          <h4
+            color="gray"
+            @mouseover="hover = true"
+            @mouseleave="hover = false"
+            :class="{ active: hover }"
+            @click="copyStringToClipboard(returnReturnIdentity)"
+          >{{returnReturnIdentity}}</h4>
         </div>
       </v-card-text>
     </v-card>
@@ -173,6 +179,7 @@ export default {
       privateKey: "",
       privateKeyDialog: false,
       importDialog: false,
+      hover: false,
       pin: "",
       pin1: "",
       pin2: "",
@@ -295,7 +302,7 @@ export default {
                 chain.resetWallet();
                 localStorage.clear();
                 this.restore = false;
-                router.push('/identity')
+                router.push("/identity");
               } else {
                 this.$root.$emit("progress_off");
                 this.$root.$emit("walletEvent");
@@ -304,10 +311,11 @@ export default {
                   "Identity restored successfully!",
                   "green"
                 );
-                 router.push("/");
+                router.push("/");
               }
-            }, 500);
+            }, 1000);
           } else {
+             setTimeout(() => {
             this.$root.$emit("progress_off");
             this.$root.$emit("walletEvent");
             this.$root.$emit(
@@ -315,13 +323,15 @@ export default {
               "Identity imported successfully!",
               "green"
             );
-             router.push("/");
+            router.push("/");
+              }, 1000);
           }
           this.importDialog = false;
         } else if (chain.loadWallet(this.pin) !== "authError") {
           Console.log("new privateKey", this.privateKey);
           this.$root.$emit("progress_on");
           await chain.importPrivateKey(this.pin, this.privateKey);
+          setTimeout(() => {
           this.$root.$emit("progress_off");
           this.$root.$emit("walletEvent");
           this.$root.$emit(
@@ -331,6 +341,7 @@ export default {
           );
           this.importDialog = false;
           router.push("/");
+              }, 1000);
         } else {
           this.$root.$emit("error_on", "PIN mismatch.", "red");
         }
@@ -505,12 +516,19 @@ export default {
     },
     returnAutomation() {
       return this.automation;
+    },
+    returnReturnIdentity(){
+      return this.publicAddress
     }
   }
 };
 </script>
 
 <style scoped>
+.active {
+  cursor: pointer;
+}
+
 .componentTitle {
   margin-top: 8rem;
   margin-left: 1rem;
