@@ -78,6 +78,7 @@
             <v-spacer></v-spacer>
             <v-btn color="gray" dark @click="cancelPin">Cancel</v-btn>
             <v-btn color="blue" dark @click="confirmPin">Confirm</v-btn>
+            <v-spacer></v-spacer>
           </v-card-actions>
           <v-card-actions v-if="!this.$store.state.automatedPIN">
             <v-spacer></v-spacer>
