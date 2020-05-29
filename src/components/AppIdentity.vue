@@ -275,7 +275,6 @@ export default {
         this.privateKey = "";
       } else {
         if (chain.loadWallet(this.returnRememberedPIN) !== "authError") {
-          this.privateKey = chain.wallet().phrase;
           this.importDialog = true;
         }
       }

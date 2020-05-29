@@ -6,7 +6,7 @@ Vue.use(Vuex);
 export const store = new Vuex.Store({
     state: {
         automatedPIN: false,
-        savedPIN:'',
+        savedPIN:"",
         counter:0,
         timeToRemember:600000,
     }, 

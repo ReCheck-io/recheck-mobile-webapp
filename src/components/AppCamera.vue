@@ -79,6 +79,22 @@
             <v-btn color="gray" dark @click="cancelPin">Cancel</v-btn>
             <v-btn color="blue" dark @click="confirmPin">Confirm</v-btn>
           </v-card-actions>
+          <v-card-actions v-if="!this.$store.state.automatedPIN">
+            <v-spacer></v-spacer>
+            <input type="checkbox" id="checkbox" @click="hint = !hint" v-model="automation" />
+            &nbsp;&nbsp;
+            <label for="checkbox">Remember your PIN</label>
+
+            <v-spacer></v-spacer>
+          </v-card-actions>
+          <v-card-actions v-if="!this.$store.state.automatedPIN">
+            <v-spacer></v-spacer>
+            <span v-if="hint">
+              You can specify the time in
+              <strong>Security Settings section.</strong>
+            </span>
+            <v-spacer></v-spacer>
+          </v-card-actions>
         </v-card>
       </v-dialog>
     </v-layout>
@@ -108,6 +124,8 @@ export default {
       environment: process.env.NODE_ENV.split(","),
       error: "",
       dialog: false,
+      hint: false,
+      automation: false,
       resolve: null,
       reject: null,
       message: null,
@@ -219,10 +237,10 @@ export default {
         this.open("Login Request", "You are about to login. Are you sure?")
           .then(resolved => {
             if (resolved) {
-              if (chain.pinned()) {
+              if (chain.pinned() && !this.$store.state.automatedPIN) {
                 this.showPinDialog = true;
               } else {
-                this.doLogin();
+                this.confirmPin();
               }
             } else {
               router.push("/");
@@ -240,10 +258,10 @@ export default {
         )
           .then(resolved => {
             if (resolved) {
-              if (chain.pinned()) {
+              if (chain.pinned() && !this.$store.state.automatedPIN) {
                 this.showPinDialog = true;
               } else {
-                this.doExecSelection();
+                this.confirmPin();
               }
               3000;
             } else {
@@ -263,10 +281,10 @@ export default {
         )
           .then(resolved => {
             if (resolved) {
-              if (chain.pinned()) {
+              if (chain.pinned() && !this.$store.state.automatedPIN) {
                 this.showPinDialog = true;
               } else {
-                this.doExecSelection();
+                this.confirmPin();
               }
             } else {
               Console.log("AFTER LOGIN");
@@ -285,10 +303,10 @@ export default {
         )
           .then(resolved => {
             if (resolved) {
-              if (chain.pinned()) {
+              if (chain.pinned() && !this.$store.state.automatedPIN) {
                 this.showPinDialog = true;
               } else {
-                this.doExecSelection();
+                this.confirmPin();
               }
             } else {
               Console.log("AFTER LOGIN");
@@ -303,8 +321,15 @@ export default {
     },
 
     confirmPin() {
-      if (this.checkPin(this.pin)) {        
+      if (this.$store.state.automatedPIN) {
+        this.pin = this.returnRememberedPIN;
+      }
+
+      if (this.checkPin(this.pin)) {
         if (chain.checkPassword(this.pin)) {
+          if (this.returnAutomation) {
+            this.pinAutomation(this.pin);
+          }
           if (this.pinCase === "login") {
             this.doLogin();
           } else if (this.pinCase === "decrypt") {
@@ -319,13 +344,13 @@ export default {
           this.$root.$emit("error_on", "PIN is incorrect!", "red");
           this.showPinDialog = false;
           this.pinCase = "";
-          router.push('/')
+          router.push("/");
         }
       } else {
         this.$root.$emit("error_on", "PIN is incorrect!", "red");
         this.showPinDialog = false;
         this.pinCase = "";
-        router.push('/')
+        router.push("/");
       }
     },
 
@@ -343,8 +368,8 @@ export default {
         } else {
           if (pin.length < 3) {
             return false;
-          }else{
-            return true
+          } else {
+            return true;
           }
         }
       }
@@ -370,6 +395,34 @@ export default {
       this.resolve(false);
       this.dialog = false;
       this.result = "";
+    },
+    async pinAutomation(PIN) {
+      if (!this.$store.state.automatedPIN) {
+        this.showPinDialog = false;
+        await this.rememberPIN(PIN);
+        this.$root.$emit("error_on", "PIN remembered successfully!", "green");
+      } else {
+        this.$root.$emit(
+          "error_on",
+          "You cannot remember your PIN, while in PINless mode",
+          "red"
+        );
+      }
+    },
+    async rememberPIN(userPIN) {
+      this.$store.dispatch("startTiming", userPIN);
+      await this.$store.dispatch("deadline");
+    }
+  },
+  computed: {
+    returnPINState() {
+      return this.$store.getters.returnPINState;
+    },
+    returnRememberedPIN() {
+      return this.$store.getters.returnSavedPIN;
+    },
+    returnAutomation() {
+      return this.automation;
     }
   }
 };
