@@ -64,17 +64,17 @@
 
     <v-card v-if="this.pinned" dark class="rounded-card">
       <v-toolbar color="#16415c" fflat>
-        <v-toolbar-title class="white--text">Create new identity</v-toolbar-title>
+        <v-toolbar-title class="white--text">Reset identity</v-toolbar-title>
       </v-toolbar>
       <v-card-text>
         <strong>
-          Creating new Identity will remove the previous one. If you have not saved the phrase for your current identity
+          Reset Identity will remove your current identity. If you have not saved the phrase for your current identity
           it will be lost FOREVER.
         </strong>
       </v-card-text>
       <v-card-actions class="pt-0">
         <v-spacer></v-spacer>
-        <v-btn @click="newIdentity" large dark color="red">Create New Identity</v-btn>
+        <v-btn @click="newIdentity" large dark color="red">Reset Identity</v-btn>
         <v-spacer></v-spacer>
       </v-card-actions>
     </v-card>
@@ -138,7 +138,7 @@
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn color="gray" dark @click="cancelPin">Cancel</v-btn>
-            <v-btn color="green" dark @click="confirmNewIdentity">Confirm</v-btn>
+            <v-btn color="red" dark @click="confirmNewIdentity">Confirm</v-btn>
             <v-spacer></v-spacer>
           </v-card-actions>
         </v-card>
@@ -175,7 +175,7 @@ export default {
       router.push("/identity");
     },
     newIdentity() {
-      this.pinMessage = "Are you really sure you want to create a new Identiy";
+      this.pinMessage = "Are you really sure you want to reset your Identity";
       this.pinDialog = 10;
       this.$root.$emit("progress_on");
       setTimeout(() => {
@@ -187,7 +187,7 @@ export default {
     confirmNewIdentity() {
       if (this.pinDialog === 10) {
         this.pinMessage =
-          "Are you really sure you want to create new identity ? You will lose the current one!";
+          "Are you really sure you want to reset your identity ? You will lose the current one forever!";
         this.pinDialog = 11;
         this.showChangeIdentityDialog = true;
       } else if (this.pinDialog === 11) {

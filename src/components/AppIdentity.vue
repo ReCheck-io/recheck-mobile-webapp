@@ -20,7 +20,7 @@
     <div v-if="this.pinned" style="margin:1rem;" />
     <v-card v-if="pinned" dark class="rounded-card">
       <v-toolbar color="#16415c" flat>
-        <v-toolbar-title class="white--text">Backup &amp; Restore</v-toolbar-title>
+        <v-toolbar-title class="white--text">Backup</v-toolbar-title>
       </v-toolbar>
       <v-card-text>
         It is
@@ -29,7 +29,7 @@
       <v-card-actions class="pt-0">
         <v-spacer></v-spacer>
         <v-btn @click="backupIdentity" large dark color="green">Backup</v-btn>
-        <v-btn large dark color="black" @click="restoreIdentity">Restore</v-btn>
+        <!-- <v-btn large dark color="black" @click="restoreIdentity">Restore</v-btn> -->
         <v-spacer></v-spacer>
       </v-card-actions>
     </v-card>
@@ -220,14 +220,6 @@ export default {
       });
     },
 
-    restoreIdentityAtStart() {
-      this.restore = true;
-      this.check = false;
-      this.pin = "";
-      this.pinMessage = "Please choose a new PIN";
-      this.pinDialog = 10;
-      this.showPinDialog = true;
-    },
 
     copyToClipboard() {
       let valueToCopy = document.querySelector("#clipboardInput");
@@ -266,19 +258,28 @@ export default {
       }
     },
 
-    restoreIdentity() {
-      if (chain.pinned() && !this.$store.state.automatedPIN) {
-        this.pin = "";
-        this.pinDialog = 2;
-        this.showPinDialog = true;
-        this.pinMessage = "Please enter your PIN";
-        this.privateKey = "";
-      } else {
-        if (chain.loadWallet(this.returnRememberedPIN) !== "authError") {
-          this.importDialog = true;
-        }
-      }
+    restoreIdentityAtStart() {
+      this.restore = true;
+      this.check = false;
+      this.pin = "";
+      this.pinMessage = "Please choose a new PIN";
+      this.pinDialog = 10;
+      this.showPinDialog = true;
     },
+
+    // restoreIdentity() {
+    //   if (chain.pinned() && !this.$store.state.automatedPIN) {
+    //     this.pin = "";
+    //     this.pinDialog = 2;
+    //     this.showPinDialog = true;
+    //     this.pinMessage = "Please enter your PIN";
+    //     this.privateKey = "";
+    //   } else {
+    //     if (chain.loadWallet(this.returnRememberedPIN) !== "authError") {
+    //       this.importDialog = true;
+    //     }
+    //   }
+    // },
 
     async doRestoreIdentity() {
       this.privateKey = this.privateKey.trim();
@@ -326,24 +327,24 @@ export default {
               }, 1000);
           }
           this.importDialog = false;
-        } else if (chain.loadWallet(this.pin) !== "authError") {
-          Console.log("new privateKey", this.privateKey);
-          this.$root.$emit("progress_on");
-          await chain.importPrivateKey(this.pin, this.privateKey);
-          setTimeout(() => {
-          this.$root.$emit("progress_off");
-          this.$root.$emit("walletEvent");
-          this.$root.$emit(
-            "error_on",
-            "Identity restored successfully!",
-            "green"
-          );
-          this.importDialog = false;
-          router.push("/");
-              }, 1000);
-        } else {
-          this.$root.$emit("error_on", "PIN mismatch.", "red");
-        }
+       }// else if (chain.loadWallet(this.pin) !== "authError") {
+        //   Console.log("new privateKey", this.privateKey);
+        //   this.$root.$emit("progress_on");
+        //   await chain.importPrivateKey(this.pin, this.privateKey);
+        //   setTimeout(() => {
+        //   this.$root.$emit("progress_off");
+        //   this.$root.$emit("walletEvent");
+        //   this.$root.$emit(
+        //     "error_on",
+        //     "Identity restored successfully!",
+        //     "green"
+        //   );
+        //   this.importDialog = false;
+        //   router.push("/");
+        //       }, 1000);
+        // } else {
+        //   this.$root.$emit("error_on", "PIN mismatch.", "red");
+        // }
       } else {
         this.$root.$emit(
           "error_on",
@@ -367,18 +368,20 @@ export default {
           this.$root.$emit("error_on", "PIN mismatch.", "red");
         }
         this.showPinDialog = false;
-      } else if (this.pinDialog === 2) {
-        if (this.$store.state.automatedPIN) {
-          this.pin = this.returnRememberedPIN;
-        }
-        if (chain.loadWallet(this.pin) !== "authError") {
-          this.importDialog = true;
-          this.pinAutomation(this.returnAutomation, this.pin);
-        } else {
-          this.$root.$emit("error_on", "PIN mismatch.", "red");
-        }
-        this.showPinDialog = false;
-      } else if (this.pinDialog === 3) {
+      } 
+      // else if (this.pinDialog === 2) {
+      //   if (this.$store.state.automatedPIN) {
+      //     this.pin = this.returnRememberedPIN;
+      //   }
+      //   if (chain.loadWallet(this.pin) !== "authError") {
+      //     this.importDialog = true;
+      //     this.pinAutomation(this.returnAutomation, this.pin);
+      //   } else {
+      //     this.$root.$emit("error_on", "PIN mismatch.", "red");
+      //   }
+      //   this.showPinDialog = false;
+      // } 
+      else if (this.pinDialog === 3) {
         if (this.pin.length < 4) {
           this.$root.$emit(
             "error_on",
