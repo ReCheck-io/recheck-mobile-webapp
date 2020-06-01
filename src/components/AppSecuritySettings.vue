@@ -278,12 +278,17 @@ export default {
               this.$root.$emit("error_on", "Old PIN mismatch", "red");
             }
           } else {
+            this.pinDialog = 5
+            this.pinMessage = "The confirmation of the new PIN was incorrect! Please input the correct one."
+            this.pin =""
+            this.showPinDialog = true;
             this.$root.$emit("progress_off");
             this.$root.$emit(
               "error_on",
               "New PIN confirmation mismatch",
               "red"
             );
+           
           }
         }
       }

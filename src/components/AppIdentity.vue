@@ -288,6 +288,7 @@ export default {
           Console.log("new privateKey", this.privateKey);
           this.$root.$emit("progress_on");
           await chain.restoreIdentityAtStart(this.pin, this.privateKey);
+          this.privateKey = "";
           if (this.restore) {
             chain.loadWallet(this.pin);
             this.isUserExisting(localStorage.publicAddress);
