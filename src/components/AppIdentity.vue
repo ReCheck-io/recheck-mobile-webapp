@@ -220,7 +220,6 @@ export default {
       });
     },
 
-
     copyToClipboard() {
       let valueToCopy = document.querySelector("#clipboardInput");
       valueToCopy.setAttribute("type", "text");
@@ -245,16 +244,11 @@ export default {
     },
 
     backupIdentity() {
-      if (chain.pinned() && !this.$store.state.automatedPIN) {
+      if (chain.pinned()) {
         this.pin = "";
         this.pinDialog = 1;
         this.showPinDialog = true;
         this.pinMessage = "Please enter your PIN";
-      } else {
-        if (chain.loadWallet(this.returnRememberedPIN) !== "authError") {
-          this.privateKey = chain.wallet().phrase;
-          this.privateKeyDialog = true;
-        }
       }
     },
 
@@ -316,19 +310,19 @@ export default {
               }
             }, 1000);
           } else {
-             setTimeout(() => {
-            this.$root.$emit("progress_off");
-            this.$root.$emit("walletEvent");
-            this.$root.$emit(
-              "error_on",
-              "Identity imported successfully!",
-              "green"
-            );
-            router.push("/");
-              }, 1000);
+            setTimeout(() => {
+              this.$root.$emit("progress_off");
+              this.$root.$emit("walletEvent");
+              this.$root.$emit(
+                "error_on",
+                "Identity imported successfully!",
+                "green"
+              );
+              router.push("/");
+            }, 1000);
           }
           this.importDialog = false;
-       }// else if (chain.loadWallet(this.pin) !== "authError") {
+        } // else if (chain.loadWallet(this.pin) !== "authError") {
         //   Console.log("new privateKey", this.privateKey);
         //   this.$root.$emit("progress_on");
         //   await chain.importPrivateKey(this.pin, this.privateKey);
@@ -357,19 +351,17 @@ export default {
 
     async confirmPin() {
       if (this.pinDialog === 1) {
-        if (this.$store.state.automatedPIN) {
-          this.pin = this.returnRememberedPIN;
-        }
         if (chain.loadWallet(this.pin) !== "authError") {
-          Console.log(chain.wallet());
           this.privateKey = chain.wallet().phrase;
           this.privateKeyDialog = true;
-          this.pinAutomation(this.returnAutomation, this.pin);
+          if (!this.$store.state.automatedPIN) {
+            this.pinAutomation(this.returnAutomation, this.pin);
+          }
         } else {
           this.$root.$emit("error_on", "PIN mismatch.", "red");
         }
         this.showPinDialog = false;
-      } 
+      }
       // else if (this.pinDialog === 2) {
       //   if (this.$store.state.automatedPIN) {
       //     this.pin = this.returnRememberedPIN;
@@ -381,7 +373,7 @@ export default {
       //     this.$root.$emit("error_on", "PIN mismatch.", "red");
       //   }
       //   this.showPinDialog = false;
-      // } 
+      // }
       else if (this.pinDialog === 3) {
         if (this.pin.length < 4) {
           this.$root.$emit(
@@ -520,8 +512,8 @@ export default {
     returnAutomation() {
       return this.automation;
     },
-    returnReturnIdentity(){
-      return this.publicAddress
+    returnReturnIdentity() {
+      return this.publicAddress;
     }
   }
 };
