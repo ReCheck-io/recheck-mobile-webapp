@@ -84,10 +84,12 @@
             <v-container grid-list-md>
               <v-layout wrap>
                 <v-flex xs12>
+                  <v-card-text class="phrase" >
+                    <strong>Plase enter your 12 word secret phrase</strong>
+                  </v-card-text>
                   <v-text-field
                     v-model="privateKey"
-                    label="Private Key Mnemonic*"
-                    hint="Please enter your key mnemonic."
+                    hint="Please enter your secret phrase."
                     required
                   ></v-text-field>
                 </v-flex>
@@ -191,7 +193,7 @@ export default {
       check: true,
       environment: process.env.NODE_ENV.split(","),
       restore: false,
-      hasIdentity: false
+      hasIdentity: false,
     };
   },
   methods: {
@@ -520,6 +522,11 @@ export default {
 </script>
 
 <style scoped>
+
+.phrase{
+  color: darkgray;
+}
+
 .active {
   cursor: pointer;
 }
