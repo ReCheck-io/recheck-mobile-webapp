@@ -230,10 +230,10 @@ export default {
           }
         } else {
           this.$root.$emit(
-              "error_on",
-              "Current PIN you want to change is incorrect",
-              "red"
-            );
+            "error_on",
+            "Current PIN you want to change is incorrect",
+            "red"
+          );
         }
       } else if (this.pinDialog === 4) {
         if (this.pin.length < 4) {
@@ -245,9 +245,18 @@ export default {
         } else {
           this.pinMessage = "Please repeat your new PIN";
           this.pinNew = this.pin;
-          this.pin = "";
-          this.pinDialog = 5;
-          this.showPinDialog = true;
+          if (this.pinOld === this.pinNew) {
+            this.showPinDialog = false;
+            this.$root.$emit(
+              "error_on",
+              "The new PIN cannot be the same as the old one!",
+              "red"
+            );
+          } else {
+            this.pin = "";
+            this.pinDialog = 5;
+            this.showPinDialog = true;
+          }
         }
       }
       // Changing the PIN
@@ -278,9 +287,10 @@ export default {
               this.$root.$emit("error_on", "Old PIN mismatch", "red");
             }
           } else {
-            this.pinDialog = 5
-            this.pinMessage = "The confirmation of the new PIN was incorrect! Please input the correct one."
-            this.pin =""
+            this.pinDialog = 5;
+            this.pinMessage =
+              "The confirmation of the new PIN was incorrect! Please input the correct one.";
+            this.pin = "";
             this.showPinDialog = true;
             this.$root.$emit("progress_off");
             this.$root.$emit(
@@ -288,7 +298,6 @@ export default {
               "New PIN confirmation mismatch",
               "red"
             );
-           
           }
         }
       }
