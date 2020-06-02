@@ -34,13 +34,13 @@ Vue.use(Router)
 
 export default new Router({
   routes: [{
-      path: '/',
+      path: '/home',
       name: 'AppHome',
       default: false,
       component: AppHome
     },
     {
-      path: '/scan',
+      path: '/',
       name: 'AppCamera',
       component: AppCamera
     },
@@ -70,7 +70,7 @@ export default new Router({
     },
     {
       path: '*',
-      redirect: '/'
+      redirect: '/home'
     }
   ],
   // eslint-disable-next-line

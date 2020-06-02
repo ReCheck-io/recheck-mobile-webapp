@@ -295,7 +295,7 @@ export default {
                   "Identity restored successfully!",
                   "green"
                 );
-                router.push("/scan");
+                router.push("/identity");
               }
             }, 1000);
           } else {
@@ -307,7 +307,7 @@ export default {
                 "Identity imported successfully!",
                 "green"
               );
-              router.push("/scan");
+              router.push("/identity");
             }, 1000);
           }
           this.importDialog = false;
@@ -395,7 +395,7 @@ export default {
             "Identity created successfully!",
             "green"
           );
-          router.push("/scan")
+          router.push("/identity")
           if (this.urlChallenge.length > 0) {
             let loginUrl = this.urlChallenge;
             this.urlChallenge = false;

@@ -38,7 +38,7 @@
           </v-card-title>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <router-link to="/scan">
+            <router-link to="/">
               <v-btn dark color="green">SCAN</v-btn>
             </router-link>
             <v-spacer />

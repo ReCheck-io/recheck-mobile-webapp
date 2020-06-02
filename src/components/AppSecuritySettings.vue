@@ -197,19 +197,11 @@ export default {
     },
 
     changePIN() {
-      if (!this.$store.state.automatedPIN) {
         this.pin = "";
         this.pinMessage = "Enter your old PIN";
         this.PINchange = true;
         this.pinDialog = 3;
-        this.showPinDialog = true;
-      } else {
-        this.$root.$emit(
-          "error_on",
-          "You cannot change your PIN, while in PINless mode",
-          "red"
-        );
-      }
+        this.showPinDialog = true;    
     },
 
     confirmPin() {
@@ -275,6 +267,9 @@ export default {
             this.$root.$emit("progress_on");
             if (chain.resetPIN(this.pinOld, this.pinNewPINConfirm)) {
               this.pinned = chain.pinned();
+              if (this.$store.state.automatedPIN) {
+                this.pinAutomation(this.pinNew)
+              }
               this.$root.$emit("walletEvent");
               this.$root.$emit("progress_off");
               this.$root.$emit(
@@ -314,6 +309,15 @@ export default {
     timeToRemember(time) {
       time = time * 60000;
       this.$store.commit("rememberTime", time);
+    },
+    async pinAutomation(PIN) {
+          this.showPinDialog = false;
+          await this.rememberPIN(PIN);
+          this.$root.$emit("error_on", "PIN remembered successfully!", "green");  
+    },
+    async rememberPIN(userPIN) {
+      this.$store.dispatch("startTiming", userPIN);
+      await this.$store.dispatch("deadline");
     }
   },
   computed: {

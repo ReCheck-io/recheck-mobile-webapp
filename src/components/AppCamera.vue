@@ -179,14 +179,14 @@ export default {
             "Login data sent successfully.",
             "green"
           );
-          router.push("/");
+          router.push("/home");
         } else {
           if (err == "authError") {
             this.$root.$emit("error_on", "PIN mismatch!", "red");
           } else {
             this.$root.$emit("error_on", "Unable to send login data", "red");
           }
-          router.push("/");
+          router.push("/home");
         }
       });
       this.pin = "";
@@ -209,7 +209,7 @@ export default {
           } else if (this.pinCase === "sign") {
             this.$root.$emit("error_on", "Signed data successfully.", "green");
           }
-          router.push("/");
+          router.push("/home");
         } else {
           if (err == "authError") {
             this.$root.$emit("error_on", "PIN mismatch!", "red");
@@ -224,7 +224,7 @@ export default {
               this.$root.$emit("error_on", "PIN mismatch!", "red");
             }
           }
-          router.push("/");
+          router.push("/home");
         }
       });
       this.pin = "";
@@ -244,12 +244,12 @@ export default {
                 this.confirmPin();
               }
             } else {
-              router.push("/");
+              router.push("/home");
             }
           })
           .catch(() => {
             this.$root.$emit("progress_off");
-            router.push("/");
+            router.push("/home");
           });
       } else if (qrResult.startsWith("sh:")) {
         this.pinCase = "share";
@@ -267,12 +267,12 @@ export default {
               3000;
             } else {
               Console.log("AFTER LOGIN");
-              router.push("/");
+              router.push("/home");
             }
           })
           .catch(() => {
             this.$root.$emit("progress_off");
-            router.push("/");
+            router.push("/home");
           });
       } else if (qrResult.startsWith("sg:")) {
         this.pinCase = "sign";
@@ -289,12 +289,12 @@ export default {
               }
             } else {
               Console.log("AFTER LOGIN");
-              router.push("/");
+              router.push("/home");
             }
           })
           .catch(() => {
             this.$root.$emit("progress_off");
-            router.push("/");
+            router.push("/home");
           });
       } else if (qrResult.startsWith("re:")) {
         this.pinCase = "decrypt";
@@ -311,12 +311,12 @@ export default {
               }
             } else {
               Console.log("AFTER LOGIN");
-              router.push("/");
+              router.push("/home");
             }
           })
           .catch(() => {
             this.$root.$emit("progress_off");
-            router.push("/");
+            router.push("/home");
           });
       }
     },
@@ -345,13 +345,13 @@ export default {
           this.$root.$emit("error_on", "PIN is incorrect!", "red");
           this.showPinDialog = false;
           this.pinCase = "";
-          router.push("/");
+          router.push("/home");
         }
       } else {
         this.$root.$emit("error_on", "PIN is incorrect!", "red");
         this.showPinDialog = false;
         this.pinCase = "";
-        router.push("/");
+        router.push("/home");
       }
     },
 

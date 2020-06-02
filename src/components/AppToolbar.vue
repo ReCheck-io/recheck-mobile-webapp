@@ -8,7 +8,7 @@
       :class="{ active: hover }" @click="atHome"
       >Recheck Mobile</v-toolbar-title>
       <v-spacer></v-spacer>
-      <router-link to="/scan">
+      <router-link to="/">
         <v-btn flat icon>
           <v-badge overlap color="orange" v-model="badge">
             <template v-slot:badge>
@@ -57,7 +57,7 @@ export default {
       hover:false,
       // https://material.io/resources/icons/?style=baseline
       links:[
-        {icon:'home', text:'Home', route:'/'},
+        {icon:'home', text:'Home', route:'/home'},
         {icon:'assignment_ind', text:'My Identity', route:'/identity'},
         {icon:'settings_applications', text:'Security Settings', route:'/securitysettings'},
         {icon:'notes', text:'Terms and Privacy', route:'/privacy'},
