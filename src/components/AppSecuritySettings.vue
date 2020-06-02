@@ -197,11 +197,11 @@ export default {
     },
 
     changePIN() {
-        this.pin = "";
-        this.pinMessage = "Enter your old PIN";
-        this.PINchange = true;
-        this.pinDialog = 3;
-        this.showPinDialog = true;    
+      this.pin = "";
+      this.pinMessage = "Enter your old PIN";
+      this.PINchange = true;
+      this.pinDialog = 3;
+      this.showPinDialog = true;
     },
 
     confirmPin() {
@@ -268,15 +268,18 @@ export default {
             if (chain.resetPIN(this.pinOld, this.pinNewPINConfirm)) {
               this.pinned = chain.pinned();
               if (this.$store.state.automatedPIN) {
-                this.pinAutomation(this.pinNew)
-              }
-              this.$root.$emit("walletEvent");
-              this.$root.$emit("progress_off");
-              this.$root.$emit(
+                this.pinAutomation(this.pinNew);
+                this.$root.$emit("error_on", "PIN changed and remembered successfully!", "green");
+              }else{
+                this.$root.$emit(
                 "error_on",
                 "PIN changed successfully!",
                 "green"
               );
+              }
+              this.$root.$emit("walletEvent");
+              this.$root.$emit("progress_off");
+              
             } else {
               this.$root.$emit("progress_off");
               this.$root.$emit("error_on", "Old PIN mismatch", "red");
@@ -311,14 +314,12 @@ export default {
       this.$store.commit("rememberTime", time);
     },
     async pinAutomation(PIN) {
-          this.showPinDialog = false;
-          await this.rememberPIN(PIN);
-          this.$root.$emit("error_on", "PIN remembered successfully!", "green");  
+      this.showPinDialog = false;
+      await this.rememberPIN(PIN);
     },
     async rememberPIN(userPIN) {
-      this.$store.dispatch("startTiming", userPIN);
-      await this.$store.dispatch("deadline");
-    }
+      this.$store.dispatch("startTiming", userPIN);  
+    },
   },
   computed: {
     returnPINState() {

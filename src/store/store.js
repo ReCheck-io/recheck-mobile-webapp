@@ -8,7 +8,7 @@ export const store = new Vuex.Store({
         automatedPIN: false,
         savedPIN:"",
         counter:0,
-        timeToRemember:600000,
+        timeToRemember:60000,
     }, 
     getters:{
         returnPINState: state => {
@@ -28,9 +28,11 @@ export const store = new Vuex.Store({
             alert("Your automated PIN entry service has ended ");
         },
         startTiming: (state, payload) => {
+            if (!state.automatedPIN){
+                alert("Your PIN is has been saved for the next " + state.timeToRemember/60000+" minutes")
+            }
             state.automatedPIN = true;            
             state.savedPIN = payload;
-            alert("Your PIN is has been saved for the next " + state.timeToRemember/60000+" minutes")
         },
         rememberTime:(state,payload) => {
             state.timeToRemember = payload
