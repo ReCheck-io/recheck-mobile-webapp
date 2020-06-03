@@ -8,7 +8,7 @@ export const store = new Vuex.Store({
         automatedPIN: false,
         savedPIN:"",
         counter:0,
-        timeToRemember:60000,
+        timeToRemember:600000,
     }, 
     getters:{
         returnPINState: state => {
