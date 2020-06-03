@@ -6,7 +6,7 @@
       @mouseover="hover = true"
       @mouseleave="hover = false"
       :class="{ active: hover }" @click="atHome"
-      >Recheck Mobile Maluk Comit</v-toolbar-title>
+      >Recheck Mobile</v-toolbar-title>
       <v-spacer></v-spacer>
       <router-link to="/">
         <v-btn flat icon>
