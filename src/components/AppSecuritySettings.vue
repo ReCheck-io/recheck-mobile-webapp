@@ -223,9 +223,10 @@ export default {
         } else {
           this.$root.$emit(
             "error_on",
-            "Current PIN you want to change is incorrect",
+            "PIN remains the same!",
             "red"
           );
+          this.showPinDialog = false;
         }
       } else if (this.pinDialog === 4) {
         if (this.pin.length < 4) {
