@@ -223,7 +223,7 @@ export default {
         } else {
           this.$root.$emit(
             "error_on",
-            "PIN remains the same!",
+            "Incorrect PIN.",
             "red"
           );
           this.showPinDialog = false;
@@ -236,13 +236,13 @@ export default {
             "red"
           );
         } else {
-          this.pinMessage = "Please repeat your new PIN";
+          this.pinMessage = "Please repeat your new PIN.";
           this.pinNew = this.pin;
           if (this.pinOld === this.pinNew) {
             this.showPinDialog = false;
             this.$root.$emit(
               "error_on",
-              "The new PIN cannot be the same as the old one!",
+              "PIN remains the same.",
               "red"
             );
           } else {
