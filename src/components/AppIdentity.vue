@@ -286,7 +286,7 @@ export default {
                 chain.resetWallet();
                 localStorage.clear();
                 this.restore = false;
-                router.push("/identity");
+                this.$router.go();
               } else {
                 this.$root.$emit("progress_off");
                 this.$root.$emit("walletEvent");
@@ -295,7 +295,7 @@ export default {
                   "Identity restored successfully!",
                   "green"
                 );
-                router.push("/identity");
+                this.$router.go();
               }
             }, 1000);
           } else {
@@ -307,7 +307,7 @@ export default {
                 "Identity imported successfully!",
                 "green"
               );
-              router.push("/identity");
+              this.$router.go();
             }, 1000);
           }
           this.importDialog = false;
