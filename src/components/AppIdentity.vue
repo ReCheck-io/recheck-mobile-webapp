@@ -84,7 +84,7 @@
             <v-container grid-list-md>
               <v-layout wrap>
                 <v-flex xs12>
-                  <v-card-text class="phrase" >
+                  <v-card-text class="phrase">
                     <strong>Plase enter your 12 word secret phrase</strong>
                   </v-card-text>
                   <v-text-field
@@ -194,7 +194,7 @@ export default {
       check: true,
       environment: process.env.NODE_ENV.split(","),
       restore: false,
-      hasIdentity: false,
+      hasIdentity: false
     };
   },
   methods: {
@@ -286,7 +286,7 @@ export default {
                 chain.resetWallet();
                 localStorage.clear();
                 this.restore = false;
-                this.$router.go();
+                this.$router.go(0);
               } else {
                 this.$root.$emit("progress_off");
                 this.$root.$emit("walletEvent");
@@ -295,7 +295,7 @@ export default {
                   "Identity restored successfully!",
                   "green"
                 );
-                this.$router.go();
+                this.$router.go(0);
               }
             }, 1000);
           } else {
@@ -307,11 +307,11 @@ export default {
                 "Identity imported successfully!",
                 "green"
               );
-              this.$router.go();
+              this.$router.go(0);
             }, 1000);
           }
           this.importDialog = false;
-        } 
+        }
       } else {
         this.$root.$emit(
           "error_on",
@@ -333,8 +333,7 @@ export default {
           this.$root.$emit("error_on", "PIN mismatch.", "red");
         }
         this.showPinDialog = false;
-      }
-      else if (this.pinDialog === 3) {
+      } else if (this.pinDialog === 3) {
         if (this.pin.length < 4) {
           this.$root.$emit(
             "error_on",
@@ -395,7 +394,7 @@ export default {
             "Identity created successfully!",
             "green"
           );
-          router.push("/identity")
+          router.push("/identity");
           if (this.urlChallenge.length > 0) {
             let loginUrl = this.urlChallenge;
             this.urlChallenge = false;
@@ -482,8 +481,7 @@ export default {
 </script>
 
 <style scoped>
-
-.phrase{
+.phrase {
   color: darkgray;
 }
 
