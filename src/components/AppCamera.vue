@@ -330,6 +330,7 @@ export default {
         if (chain.checkPassword(this.pin)) {
           if (this.returnAutomation) {
             this.pinAutomation(this.pin);
+            this.automation = false;
           }
           if (this.pinCase === "login") {
             this.doLogin();
@@ -358,6 +359,7 @@ export default {
     cancelPin() {
       this.pin = "";
       this.showPinDialog = false;
+      this.automation = false;
     },
 
     checkPin(pin) {

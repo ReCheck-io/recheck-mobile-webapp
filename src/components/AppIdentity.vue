@@ -328,6 +328,7 @@ export default {
           this.privateKeyDialog = true;
           if (!this.$store.state.automatedPIN) {
             this.pinAutomation(this.returnAutomation, this.pin);
+            this.automation = false;
           }
         } else {
           this.$root.$emit("error_on", "PIN mismatch.", "red");
@@ -387,6 +388,7 @@ export default {
           await chain.init(this.pin);
           this.pinned = chain.pinned();
           this.pinAutomation(this.returnAutomation, this.pin);
+          this.automation = false;
           this.$root.$emit("walletEvent");
           this.$root.$emit("progress_off");
           this.$root.$emit(
@@ -417,6 +419,8 @@ export default {
       this.pin2 = "";
       this.pin = "";
       this.showPinDialog = false;
+      this.automation = false;
+      
     },
     copyStringToClipboard(str) {
       // Create new element
