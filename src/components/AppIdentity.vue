@@ -38,7 +38,7 @@
       <v-toolbar color="#16415c" flat>
         <v-toolbar-title class="white--text">New Identity</v-toolbar-title>
       </v-toolbar>
-      <v-card-text>To start using the app, please create your new digital identity. You will be asked to create and remember your personal security PIN.</v-card-text>
+      <v-card-text>To start using the app, please create your new digital identity. You will be asked to create and remember your personal secure password.</v-card-text>
       <v-card-actions class="pt-0">
         <v-spacer></v-spacer>
         <v-btn @click="createIdentity" large dark color="green">Create Identity</v-btn>
@@ -50,7 +50,7 @@
       <v-toolbar color="#16415c" flat>
         <v-toolbar-title class="white--text">Restore Identity</v-toolbar-title>
       </v-toolbar>
-      <v-card-text>If you already have an identity and keep your secret phrase, you can restore it. You will be asked to create and remember your personal security PIN.</v-card-text>
+      <v-card-text>If you already have an identity and keep your secret phrase, you can restore it. You will be asked to create and remember your personal secure password.</v-card-text>
       <v-card-actions class="pt-0">
         <v-spacer></v-spacer>
         <v-btn @click="restoreIdentityAtStart" large dark color="green">Restore Identity</v-btn>
@@ -109,7 +109,7 @@
       <v-dialog v-model="this.showPinDialog" @keydown.esc="cancel" persistent max-width="600px">
         <v-card>
           <v-toolbar color="#16415c" dark dense flat>
-            <v-toolbar-title class="white--text">PIN</v-toolbar-title>
+            <v-toolbar-title class="white--text">Password</v-toolbar-title>
           </v-toolbar>
           <v-card-text>
             <v-container grid-list-md>
@@ -121,8 +121,8 @@
                   <v-text-field
                     type="password"
                     v-model="pin"
-                    label="PIN"
-                    hint="Please enter PIN."
+                    label="Password"
+                    hint="Please enter password."
                     required
                   ></v-text-field>
                 </v-flex>
@@ -139,7 +139,7 @@
             <v-spacer></v-spacer>
             <input type="checkbox" id="checkbox" @click="hint = !hint" v-model="automation" />
             &nbsp;&nbsp;
-            <label for="checkbox">Remember your PIN</label>
+            <label for="checkbox">Remember my password</label>
 
             <v-spacer></v-spacer>
           </v-card-actions>
@@ -188,7 +188,7 @@ export default {
       pin2: "",
       pinDiaog: 0,
       showPinDialog: false,
-      pinMessage: "Enter your PIN",
+      pinMessage: "Enter your password",
       automation: false,
       hint: false,
       check: true,
@@ -210,7 +210,7 @@ export default {
     createIdentity() {
       this.check = false;
       this.pin = "";
-      this.pinMessage = "Please choose a new PIN";
+      this.pinMessage = "Please choose a new password";
       this.pinDialog = 3;
       this.showPinDialog = true;
     },
@@ -251,7 +251,7 @@ export default {
         this.pin = "";
         this.pinDialog = 1;
         this.showPinDialog = true;
-        this.pinMessage = "Please enter your PIN";
+        this.pinMessage = "Please enter your password.";
       }
     },
 
@@ -259,7 +259,7 @@ export default {
       this.restore = true;
       this.check = false;
       this.pin = "";
-      this.pinMessage = "Please choose a new PIN";
+      this.pinMessage = "Please choose a new password.";
       this.pinDialog = 10;
       this.showPinDialog = true;
     },
@@ -331,19 +331,19 @@ export default {
             this.automation = false;
           }
         } else {
-          this.$root.$emit("error_on", "PIN mismatch.", "red");
+          this.$root.$emit("error_on", "Password mismatch.", "red");
         }
         this.showPinDialog = false;
       } else if (this.pinDialog === 3) {
         if (this.pin.length < 4) {
           this.$root.$emit(
             "error_on",
-            "PIN must be at least 4 characters long!",
+            "Password must be at least 4 characters long!",
             "red"
           );
         } else {
           this.check = true;
-          this.pinMessage = "Please repeat your new PIN";
+          this.pinMessage = "Please repeat your new Password.";
           this.pin1 = this.pin;
           this.pin = "";
           this.pinDialog = 4;
@@ -353,12 +353,12 @@ export default {
         if (this.pin.length < 4) {
           this.$root.$emit(
             "error_on",
-            "PIN must be at least 4 characters long!",
+            "Password must be at least 4 characters long!",
             "red"
           );
         } else {
           this.check = true;
-          this.pinMessage = "Please repeat your new PIN";
+          this.pinMessage = "Please repeat your new password.";
           this.pin1 = this.pin;
           this.pin = "";
           this.pinDialog = 11;
@@ -368,7 +368,7 @@ export default {
         if (this.pin.length < 4) {
           this.$root.$emit(
             "error_on",
-            "PIN must be at least 4 characters long!",
+            "Password must be at least 4 characters long!",
             "red"
           );
         } else {
@@ -409,7 +409,7 @@ export default {
           this.pinDialog = 0;
           this.showPinDialog = false;
           this.pin = "";
-          this.$root.$emit("error_on", "PIN mismatch.", "red");
+          this.$root.$emit("error_on", "Password mismatch.", "red");
         }
       }
     },
@@ -452,12 +452,12 @@ export default {
         if (check) {
           this.showPinDialog = false;
           await this.rememberPIN(PIN);
-          this.$root.$emit("error_on", "PIN remembered successfully!", "green");
+          this.$root.$emit("error_on", "Password remembered successfully!", "green");
         }
       } else {
         this.$root.$emit(
           "error_on",
-          "You cannot remember your PIN, while in PINless mode",
+          "You already remembered your password.",
           "red"
         );
       }

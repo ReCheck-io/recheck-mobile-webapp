@@ -16,11 +16,11 @@
 
     <v-card v-if="this.pinned" dark class="rounded-card">
       <v-toolbar color="#16415c" fflat>
-        <v-toolbar-title class="white--text">Manage your PIN</v-toolbar-title>
+        <v-toolbar-title class="white--text">Manage your password</v-toolbar-title>
       </v-toolbar>
       <v-card-text>
         In this section you can either
-        <strong>change</strong> your PIN.
+        <strong>change</strong> your <strong>password</strong>.
       </v-card-text>
       <v-card-actions class="pt-0">
         <v-spacer></v-spacer>
@@ -32,11 +32,11 @@
     <div style="margin:1rem;" />
     <v-card v-if="this.pinned" dark class="rounded-card">
       <v-toolbar color="#16415c" fflat>
-        <v-toolbar-title class="white--text">Time for PIN automation</v-toolbar-title>
+        <v-toolbar-title class="white--text">Time for password automation</v-toolbar-title>
       </v-toolbar>
       <v-card-text>
         Or set for
-        <strong>how much minutes</strong> do you wish your PIN to be remembered
+        <strong>how much minutes</strong> do you wish your passowrd to be remembered
         for. Right now it is set at
         <br />
         <br />
@@ -83,7 +83,7 @@
       <v-dialog v-model="this.showPinDialog" @keydown.esc="cancel" persistent max-width="600px">
         <v-card>
           <v-toolbar color="#16415c" dark dense flat>
-            <v-toolbar-title class="white--text">PIN</v-toolbar-title>
+            <v-toolbar-title class="white--text">Password</v-toolbar-title>
           </v-toolbar>
           <v-card-text>
             <v-container grid-list-md>
@@ -95,8 +95,8 @@
                   <v-text-field
                     type="password"
                     v-model="pin"
-                    label="PIN"
-                    hint="Please enter PIN."
+                    label="Password"
+                    hint="Please enter password."
                     required
                   ></v-text-field>
                 </v-flex>
@@ -164,7 +164,7 @@ export default {
     pinOld: "",
     pinNew: "",
     pinNewPINConfirm: "",
-    pinMessage: "Enter your PIN",
+    pinMessage: "Enter your password",
     showPinDialog: false,
     showChangeIdentityDialog: false,
     PINchange: false,
@@ -198,7 +198,7 @@ export default {
 
     changePIN() {
       this.pin = "";
-      this.pinMessage = "Enter your old PIN";
+      this.pinMessage = "Enter your old password.";
       this.PINchange = true;
       this.pinDialog = 3;
       this.showPinDialog = true;
@@ -210,11 +210,11 @@ export default {
           if (this.pin.length < 4) {
             this.$root.$emit(
               "error_on",
-              "PIN must be at least 4 characters long!",
+              "Your password must be at least 4 characters long!",
               "red"
             );
           } else {
-            this.pinMessage = "Enter your new PIN";
+            this.pinMessage = "Enter your new password";
             this.pinOld = this.pin;
             this.pin = "";
             this.pinDialog = 4;
@@ -223,7 +223,7 @@ export default {
         } else {
           this.$root.$emit(
             "error_on",
-            "Incorrect PIN.",
+            "Incorrect password.",
             "red"
           );
           this.showPinDialog = false;
@@ -232,17 +232,17 @@ export default {
         if (this.pin.length < 4) {
           this.$root.$emit(
             "error_on",
-            "PIN must be at least 4 characters long!",
+            "Password must be at least 4 characters long!",
             "red"
           );
         } else {
-          this.pinMessage = "Please repeat your new PIN.";
+          this.pinMessage = "Please repeat your new password.";
           this.pinNew = this.pin;
           if (this.pinOld === this.pinNew) {
             this.showPinDialog = false;
             this.$root.$emit(
               "error_on",
-              "PIN remains the same.",
+              "Password remains the same.",
               "red"
             );
           } else {
@@ -258,7 +258,7 @@ export default {
         if (this.pin.length < 4) {
           this.$root.$emit(
             "error_on",
-            "PIN must be at least 4 characters long!",
+            "Password must be at least 4 characters long!",
             "red"
           );
         } else {
@@ -270,11 +270,11 @@ export default {
               this.pinned = chain.pinned();
               if (this.$store.state.automatedPIN) {
                 this.pinAutomation(this.pinNew);
-                this.$root.$emit("error_on", "PIN changed and remembered successfully!", "green");
+                this.$root.$emit("error_on", "Password changed and remembered successfully!", "green");
               }else{
                 this.$root.$emit(
                 "error_on",
-                "PIN changed successfully!",
+                "Password changed successfully!",
                 "green"
               );
               }
@@ -283,18 +283,18 @@ export default {
               
             } else {
               this.$root.$emit("progress_off");
-              this.$root.$emit("error_on", "Old PIN mismatch", "red");
+              this.$root.$emit("error_on", "Old password mismatch", "red");
             }
           } else {
             this.pinDialog = 5;
             this.pinMessage =
-              "The confirmation of the new PIN was incorrect! Please input the correct one.";
+              "The confirmation of the new password is incorrect!";
             this.pin = "";
             this.showPinDialog = true;
             this.$root.$emit("progress_off");
             this.$root.$emit(
               "error_on",
-              "New PIN confirmation mismatch",
+              "New password confirmation mismatch",
               "red"
             );
           }

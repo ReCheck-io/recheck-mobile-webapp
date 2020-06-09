@@ -57,7 +57,7 @@
       <v-dialog v-model="this.showPinDialog" @keydown.esc="cancel" persistent max-width="600px">
         <v-card>
           <v-toolbar dark dense flat>
-            <v-toolbar-title class="white--text">Your PIN</v-toolbar-title>
+            <v-toolbar-title class="white--text">Password</v-toolbar-title>
           </v-toolbar>
           <v-card-text>
             <v-container grid-list-md>
@@ -66,8 +66,8 @@
                   <v-text-field
                     type="password"
                     v-model="pin"
-                    label="PIN"
-                    hint="Please enter your PIN."
+                    label="Password"
+                    hint="Please enter your password."
                     required
                   ></v-text-field>
                 </v-flex>
@@ -84,7 +84,7 @@
             <v-spacer></v-spacer>
             <input type="checkbox" id="checkbox" @click="hint = !hint" v-model="automation" />
             &nbsp;&nbsp;
-            <label for="checkbox">Remember your PIN</label>
+            <label for="checkbox">Remember my password.</label>
 
             <v-spacer></v-spacer>
           </v-card-actions>
@@ -182,7 +182,7 @@ export default {
           router.push("/home");
         } else {
           if (err == "authError") {
-            this.$root.$emit("error_on", "PIN mismatch!", "red");
+            this.$root.$emit("error_on", "Password mismatch!", "red");
           } else {
             this.$root.$emit("error_on", "Unable to send login data", "red");
           }
@@ -212,7 +212,7 @@ export default {
           router.push("/home");
         } else {
           if (err == "authError") {
-            this.$root.$emit("error_on", "PIN mismatch!", "red");
+            this.$root.$emit("error_on", "Password mismatch!", "red");
           } else {
             if (this.pinCase === "decrypt") {
               this.$root.$emit("error_on", "Failed to decrypt data.", "red");
@@ -221,7 +221,7 @@ export default {
             } else if (this.pinCase === "sign") {
               this.$root.$emit("error_on", "Failed to sign data.", "red");
             } else if (this.pin < 4) {
-              this.$root.$emit("error_on", "PIN mismatch!", "red");
+              this.$root.$emit("error_on", "Password mismatch!", "red");
             }
           }
           router.push("/home");
@@ -343,13 +343,13 @@ export default {
           }
           this.showPinDialog = false;
         } else {
-          this.$root.$emit("error_on", "PIN is incorrect!", "red");
+          this.$root.$emit("error_on", "Password is incorrect!", "red");
           this.showPinDialog = false;
           this.pinCase = "";
           router.push("/home");
         }
       } else {
-        this.$root.$emit("error_on", "PIN is incorrect!", "red");
+        this.$root.$emit("error_on", "Password is incorrect!", "red");
         this.showPinDialog = false;
         this.pinCase = "";
         router.push("/home");
@@ -403,11 +403,11 @@ export default {
       if (!this.$store.state.automatedPIN) {
         this.showPinDialog = false;
         await this.rememberPIN(PIN);
-        this.$root.$emit("error_on", "PIN remembered successfully!", "green");
+        this.$root.$emit("error_on", "Password remembered successfully!", "green");
       } else {
         this.$root.$emit(
           "error_on",
-          "You cannot remember your PIN, while in PINless mode",
+          "You have alredy remembered your password.",
           "red"
         );
       }
