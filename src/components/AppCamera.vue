@@ -84,15 +84,16 @@
             <v-spacer></v-spacer>
             <input type="checkbox" id="checkbox" @click="hint = !hint" v-model="automation" />
             &nbsp;&nbsp;
-            <label for="checkbox">Remember my password.</label>
+            <label for="checkbox">Remember my password for <strong>{{returnTimeToRemember/60000}} minutes.</strong></label>
 
             <v-spacer></v-spacer>
           </v-card-actions>
           <v-card-actions v-if="!this.$store.state.automatedPIN">
             <v-spacer></v-spacer>
             <span v-if="hint">
-              You can specify the time in
-              <strong>Security Settings section.</strong>
+              You can select the time under
+              <strong>Security Settings section.</strong> 
+              
             </span>
             <v-spacer></v-spacer>
           </v-card-actions>
@@ -423,6 +424,9 @@ export default {
     },
     returnRememberedPIN() {
       return this.$store.getters.returnSavedPIN;
+    },
+    returnTimeToRemember(){
+      return this.$store.getters.returnTimeToRemember;
     },
     returnAutomation() {
       return this.automation;
