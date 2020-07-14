@@ -207,6 +207,8 @@ export default {
             );
           } else if (this.pinCase === "share") {
             this.$root.$emit("error_on", "Shared data successfully.", "green");
+          } else if (this.pinCase === "shareEmail") {
+            this.$root.$emit("error_on", "Shared data by email successfully.", "green");
           } else if (this.pinCase === "sign") {
             this.$root.$emit("error_on", "Signed data successfully.", "green");
           }
@@ -219,6 +221,8 @@ export default {
               this.$root.$emit("error_on", "Failed to decrypt data.", "red");
             } else if (this.pinCase === "share") {
               this.$root.$emit("error_on", "Failed to share data.", "red");
+            } else if (this.pinCase === "shareEmail") {
+              this.$root.$emit("error_on", "Failed to share data by email.", "red");
             } else if (this.pinCase === "sign") {
               this.$root.$emit("error_on", "Failed to sign data.", "red");
             } else if (this.pin < 4) {
@@ -257,6 +261,29 @@ export default {
         this.open(
           "Document Share Request",
           "You are about to share a document. Are you sure?"
+        )
+          .then(resolved => {
+            if (resolved) {
+              if (chain.pinned() && !this.$store.state.automatedPIN) {
+                this.showPinDialog = true;
+              } else {
+                this.confirmPin();
+              }
+              3000;
+            } else {
+              Console.log("AFTER LOGIN");
+              router.push("/home");
+            }
+          })
+          .catch(() => {
+            this.$root.$emit("progress_off");
+            router.push("/home");
+          });
+      }else if (qrResult.startsWith("se:")) {
+        this.pinCase = "shareEmail";
+        this.open(
+          "Document Email Share Request",
+          "You are about to share a document by email. Are you sure?"
         )
           .then(resolved => {
             if (resolved) {
@@ -338,6 +365,8 @@ export default {
           } else if (this.pinCase === "decrypt") {
             this.doExecSelection();
           } else if (this.pinCase === "share") {
+            this.doExecSelection();
+          } else if (this.pinCase === "shareEmail") {
             this.doExecSelection();
           } else if (this.pinCase === "sign") {
             this.doExecSelection();
