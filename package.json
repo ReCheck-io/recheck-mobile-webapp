@@ -2,6 +2,7 @@
   "name": "help",
   "version": "0.1.0",
   "private": true,
+  "author": "ReCheck BV <info@recheck.io>",
   "scripts": {
     "beta": "NODE_ENV=\"https://beta.recheck.io,ae\" npm run serve",
     "beta_eth": "NODE_ENV=\"https://beta.recheck.io,eth\" npm run serve",
